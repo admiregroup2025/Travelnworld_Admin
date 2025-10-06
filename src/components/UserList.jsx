@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { HiUsers } from "react-icons/hi2";
 import { HiPencil, HiTrash, HiEye } from "react-icons/hi";
+import ProfileButton from "./ProfileButton";
 
 const UserList = () => {
   const [search, setSearch] = useState("");
@@ -48,19 +49,13 @@ const UserList = () => {
   return (
     <div className="min-h-screen w-full px-4 sm:px-8 py-6 bg-[#f8fafc]">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-xl border border-[rgba(37,99,235,0.2)] rounded-2xl shadow-md mb-6 px-6 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
-        <div className="flex items-center text-blue-600 text-2xl font-bold gap-4">
-          <HiUsers className="text-[#2563eb] text-3xl" />
-          <span className="text-3xl font-bold">Users</span>
+      <header className="bg-white/90 backdrop-blur-[15px] p-4 sm:p-6 rounded-[20px] border border-blue-600/20 mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] relative z-10">
+        <div className="text-xl sm:text-2xl lg:text-[2rem] font-bold text-blue-600 flex items-center gap-3 sm:gap-4">
+        <HiUsers/>
+          <span>User</span>
         </div>
-        <div className="flex items-center gap-4 w-full sm:w-auto">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-red-600 text-white flex items-center justify-center text-xl">
-            <i className="fas fa-user"></i>
-          </div>
-          <div>
-            <div className="font-semibold">Admin User</div>
-            <div className="text-sm text-gray-500">Administrator</div>
-          </div>
+        <div className="flex items-center gap-3 sm:gap-4">
+          <ProfileButton />
         </div>
       </header>
 
@@ -91,7 +86,9 @@ const UserList = () => {
                   </li>
                 ))
               ) : (
-                <li className="px-4 py-2 text-gray-500 text-sm">No users found</li>
+                <li className="px-4 py-2 text-gray-500 text-sm">
+                  No users found
+                </li>
               )}
             </ul>
           )}
@@ -159,7 +156,9 @@ const UserList = () => {
                 key={index}
                 className="bg-white rounded-2xl shadow-md p-4 flex flex-col space-y-2"
               >
-                <div className="text-lg font-semibold text-[#2563eb]">{user.name}</div>
+                <div className="text-lg font-semibold text-[#2563eb]">
+                  {user.name}
+                </div>
                 <div className="text-sm text-gray-700">
                   <strong>Email:</strong> {user.email}
                 </div>
@@ -192,7 +191,9 @@ const UserList = () => {
               </div>
             ))
           ) : (
-            <div className="text-center py-4 text-gray-500">No users found.</div>
+            <div className="text-center py-4 text-gray-500">
+              No users found.
+            </div>
           )}
         </div>
       </div>

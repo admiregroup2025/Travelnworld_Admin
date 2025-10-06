@@ -1,15 +1,13 @@
-// Sidebar.jsx
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
 
-  // Updated to handle multiple dropdowns
   const [dropdownState, setDropdownState] = useState({
     user: false,
-    settings: false,
-    agent: false, // <- add this
+    itineraries: false,
+    agent: false,
   });
 
   const isActive = (path) => location.pathname === path;
@@ -17,178 +15,57 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <>
       <style>{`
-        :root {
-          --primary-color: #2563eb;
-          --secondary-color: #dc2626;
-          --accent-color: #059669;
-          --dark-bg: #ffffff;
-          --card-bg: rgba(255,255,255,0.9);
-          --text-primary: #1f2937;
-          --text-secondary: #6b7280;
-          --glass-border: rgba(37, 99, 235, 0.2);
-          --sidebar-bg: rgba(255,255,255,0.95);
-          --hover-bg: rgba(37, 99, 235, 0.1);
-        }
-
-        .sidebar {
-          width: 280px;
-          background: var(--sidebar-bg);
-          backdrop-filter: blur(15px);
-          border-right: 1px solid var(--glass-border);
-          position: fixed;
-          min-height: 100vh;
-          overflow-y: auto;
-          z-index: 1000;
-          transition: all 0.3s ease;
-          box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar.open {
-          transform: translateX(0);
-        }
-
-        @media (max-width: 1024px) {
-          .sidebar {
-            transform: translateX(-100%);
-          }
-          .sidebar.open {
-            transform: translateX(0);
-          }
-        }
-
-        .sidebar-header {
-          padding: 2rem 1.5rem;
-          border-bottom: 1px solid var(--glass-border);
-          text-align: center;
-        }
-
-        .admin-logo {
-          font-size: 2rem;
-          font-weight: 800;
-          color: var(--primary-color);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .admin-logo i {
-          animation: rotate 3s linear infinite;
-        }
-
         @keyframes rotate {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
 
-        .admin-title {
-          font-size: 0.9rem;
-          color: var(--text-secondary);
-          font-weight: 500;
+        .animate-rotate {
+          animation: rotate 3s linear infinite;
         }
 
-        .nav-menu {
-          padding: 1rem 0;
-        }
-
-        .nav-item {
-          margin: 0.5rem 1rem;
-        }
-
-        .nav-link {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding: 1rem 1.5rem;
-          color: var(--text-primary);
-          text-decoration: none;
-          border-radius: 12px;
-          transition: all 0.3s ease;
+        .nav-link-before {
           position: relative;
           overflow: hidden;
         }
 
-        .nav-link::before {
+        .nav-link-before::before {
           content: '';
           position: absolute;
           top: 0;
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+          background: linear-gradient(45deg, rgb(37, 99, 235), rgb(220, 38, 38));
           opacity: 0.1;
           transition: left 0.3s ease;
         }
 
-        .nav-link:hover::before {
+        .nav-link-before:hover::before {
           left: 0;
         }
 
-        .nav-link:hover {
-          background: var(--hover-bg);
-          color: var(--primary-color);
-          transform: translateX(5px);
+        .sidebar-scroll::-webkit-scrollbar {
+          width: 6px;
         }
 
-        .nav-link.active {
-          background: linear-gradient(45deg, rgba(37, 99, 235, 0.1), rgba(220, 38, 38, 0.1));
-          color: var(--primary-color);
-          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        .sidebar-scroll::-webkit-scrollbar-track {
+          background: rgba(37, 99, 235, 0.05);
+          border-radius: 10px;
         }
 
-        .nav-icon {
-          font-size: 1.2rem;
-          width: 20px;
-          text-align: center;
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+          background: rgba(37, 99, 235, 0.3);
+          border-radius: 10px;
         }
 
-        /* Dropdown Styles */
-        .dropdown-toggle {
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
+        .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(37, 99, 235, 0.5);
         }
 
-        .dropdown-arrow {
-          transition: transform 0.3s ease;
-        }
-
-        .dropdown-arrow.open {
-          transform: rotate(90deg);
-        }
-
-        .dropdown-menu {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.3s ease;
-          padding-left: 1.5rem;
-        }
-
-        .dropdown-menu.open {
-          max-height: 500px;
-        }
-
-        .dropdown-link {
-          display: block;
-          padding: 0.75rem 1.5rem;
-          text-decoration: none;
-          color: var(--text-secondary);
-          border-radius: 8px;
-          transition: all 0.2s ease;
-        }
-
-        .dropdown-link:hover {
-          color: var(--primary-color);
-          background: var(--hover-bg);
-        }
-
-        .dropdown-link.active {
-          color: var(--primary-color);
-          background: rgba(37, 99, 235, 0.1);
-          font-weight: 500;
+        .sidebar-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(37, 99, 235, 0.3) rgba(37, 99, 235, 0.05);
         }
       `}</style>
 
@@ -197,32 +74,59 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         rel="stylesheet"
       />
 
-      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`} id="sidebar">
-        <div className="sidebar-header">
-          <div className="admin-logo">
-            <i className="fas fa-shield-alt"></i>
-            Admire
+      <aside
+        className={`
+          sidebar-scroll
+          fixed top-0 left-0 w-[280px] h-screen
+          bg-white/95 backdrop-blur-[15px] 
+          border-r border-blue-600/20 
+          z-[1000] 
+          transition-transform duration-300 ease-in-out
+          shadow-[2px_0_20px_rgba(0,0,0,0.1)]
+          overflow-y-auto overflow-x-hidden
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+        `}
+        id="sidebar"
+      >
+        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-[15px] p-6 sm:p-8 border-b border-blue-600/20 text-center">
+          <div className="text-2xl sm:text-3xl font-extrabold text-blue-600 flex items-center justify-center gap-2 mb-2">
+            <i className="fas fa-shield-alt animate-rotate"></i>
+            <span>TravelnWorld</span>
           </div>
-          <div className="admin-title">Admin Dashboard</div>
+          <div className="text-sm sm:text-base text-gray-500 font-medium">
+            Super Admin Dashboard
+          </div>
         </div>
 
-        <nav className="nav-menu">
+        {/* Navigation Menu */}
+        <nav className="py-4 pb-8">
           {/* Dashboard */}
-          <div className="nav-item">
+          <div className="mx-4 my-2">
             <Link
               to="/"
-              className={`nav-link ${isActive("/") ? "active" : ""}`}
+              className={`
+                nav-link-before
+                flex items-center gap-4 px-6 py-4
+                text-gray-800 no-underline rounded-xl
+                transition-all duration-300
+                ${
+                  isActive("/")
+                    ? "bg-gradient-to-r from-blue-600/10 to-red-600/10 text-blue-600 shadow-[0_4px_15px_rgba(37,99,235,0.2)]"
+                    : "hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+                }
+              `}
               onClick={() => setSidebarOpen(false)}
             >
-              <i className="nav-icon fas fa-tachometer-alt"></i>
-              <span>Dashboard</span>
+              <i className="fas fa-tachometer-alt text-lg sm:text-xl w-5 text-center"></i>
+              <span className="text-sm sm:text-base">Dashboard</span>
             </Link>
           </div>
 
           {/* User Dropdown */}
-          <div className="nav-item">
+          <div className="mx-4 my-2">
             <div
-              className="nav-link dropdown-toggle"
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
@@ -230,34 +134,38 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 }))
               }
             >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-              >
-                <i className="nav-icon fas fa-user-cog"></i>
-                <span>User</span>
+              <div className="flex items-center gap-4">
+                <i className="fas fa-user-cog text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base">User</span>
               </div>
               <i
-                className={`fas fa-chevron-right dropdown-arrow ${
-                  dropdownState.user ? "open" : ""
+                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
+                  dropdownState.user ? "rotate-90" : ""
                 }`}
               ></i>
             </div>
             <div
-              className={`dropdown-menu ${dropdownState.user ? "open" : ""}`}
+              className={`pl-6 overflow-hidden transition-all duration-300 ${
+                dropdownState.user ? "max-h-[500px]" : "max-h-0"
+              }`}
             >
               <Link
                 to="/allusers"
-                className={`dropdown-link ${
-                  isActive("/users/all") ? "active" : ""
+                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/allusers")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
                 All Users
               </Link>
               <Link
-                to="/users/add"
-                className={`dropdown-link ${
-                  isActive("/users/add") ? "active" : ""
+                to="/adduser"
+                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/adduser")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -266,60 +174,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </div>
           </div>
 
-          {/* Settings Dropdown */}
-          <div className="nav-item">
+          {/* Agent Dropdown */}
+          <div className="mx-4 my-2">
             <div
-              className="nav-link dropdown-toggle"
-              onClick={() =>
-                setDropdownState((prev) => ({
-                  ...prev,
-                  settings: !prev.settings,
-                }))
-              }
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-              >
-                <i className="nav-icon fas fa-cogs"></i>
-                <span>Settings</span>
-              </div>
-              <i
-                className={`fas fa-chevron-right dropdown-arrow ${
-                  dropdownState.settings ? "open" : ""
-                }`}
-              ></i>
-            </div>
-            <div
-              className={`dropdown-menu ${
-                dropdownState.settings ? "open" : ""
-              }`}
-            >
-              <Link
-                to="/settings/profile"
-                className={`dropdown-link ${
-                  isActive("/settings/profile") ? "active" : ""
-                }`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                Profile Settings
-              </Link>
-              <Link
-                to="/settings/security"
-                className={`dropdown-link ${
-                  isActive("/settings/security") ? "active" : ""
-                }`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                Security
-              </Link>
-            </div>
-          </div>
-
-          {/* Other Static Links */}
-          {/* Agent Dropdown Start */}
-          <div className="nav-item">
-            <div
-              className="nav-link dropdown-toggle"
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
@@ -327,34 +185,38 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 }))
               }
             >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-              >
-                <i className="nav-icon fas fa-users"></i>
-                <span>Agent</span>
+              <div className="flex items-center gap-4">
+                <i className="fas fa-users text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base">Agent</span>
               </div>
               <i
-                className={`fas fa-chevron-right dropdown-arrow ${
-                  dropdownState.agent ? "open" : ""
+                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
+                  dropdownState.agent ? "rotate-90" : ""
                 }`}
               ></i>
             </div>
             <div
-              className={`dropdown-menu ${dropdownState.agent ? "open" : ""}`}
+              className={`pl-6 overflow-hidden transition-all duration-300 ${
+                dropdownState.agent ? "max-h-[500px]" : "max-h-0"
+              }`}
             >
               <Link
                 to="/allagents"
-                className={`dropdown-link ${
-                  isActive("/agents/all") ? "active" : ""
+                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/allagents")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
                 All Agents
               </Link>
               <Link
-                to="/agents/add"
-                className={`dropdown-link ${
-                  isActive("/agents/add") ? "active" : ""
+                to="/addagent"
+                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/addagent")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -362,33 +224,133 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </Link>
             </div>
           </div>
-          {/* Agent Dropdown End */}
 
-          <div className="nav-item">
-            <a href="manage-home.html" className="nav-link">
-              <i className="nav-icon fas fa-home"></i>
-              <span>Manage Home</span>
+          {/* Itineraries Dropdown */}
+          <div className="mx-4 my-2">
+            <div
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              onClick={() =>
+                setDropdownState((prev) => ({
+                  ...prev,
+                  itineraries: !prev.itineraries,
+                }))
+              }
+            >
+              <div className="flex items-center gap-4">
+                <i className="fas fa-map-marked-alt text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base">Itineraries</span>
+              </div>
+              <i
+                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
+                  dropdownState.itineraries ? "rotate-90" : ""
+                }`}
+              ></i>
+            </div>
+            <div
+              className={`pl-6 overflow-hidden transition-all duration-300 ${
+                dropdownState.itineraries ? "max-h-[500px]" : "max-h-0"
+              }`}
+            >
+              <Link
+                to="/itineraries"
+                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/itineraries")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                All Itineraries
+              </Link>
+              <Link
+                to="/additineraries"
+                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/itineraries/add")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                Add Itinerary
+              </Link>
+              <Link
+                to="/itineraries/form"
+                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/itineraries/form")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                Itinerary Form
+              </Link>
+            </div>
+          </div>
+
+          {/* Manage Home */}
+          <div className="mx-4 my-2">
+            <a
+              href="manage-home.html"
+              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+            >
+              <i className="fas fa-home text-lg sm:text-xl w-5 text-center"></i>
+              <span className="text-sm sm:text-base">Manage Home</span>
             </a>
           </div>
 
-          <div className="nav-item">
-            <a href="manage-team.html" className="nav-link">
-              <i className="nav-icon fas fa-user-friends"></i>
-              <span>Team Management</span>
+          {/* Team Management */}
+          <div className="mx-4 my-2">
+            <a
+              href="manage-team.html"
+              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+            >
+              <i className="fas fa-user-friends text-lg sm:text-xl w-5 text-center"></i>
+              <span className="text-sm sm:text-base">Team Management</span>
             </a>
           </div>
 
-          <div className="nav-item">
-            <Link to="/exportdata" className="nav-link">
-              <i className="nav-icon fas fa-file-pdf"></i>
-              <span>Export PDF</span>
+          {/* Export PDF */}
+          <div className="mx-4 my-2">
+            <Link
+              to="/exportdata"
+              className={`
+                nav-link-before
+                flex items-center gap-4 px-6 py-4
+                text-gray-800 no-underline rounded-xl
+                transition-all duration-300
+                ${
+                  isActive("/exportdata")
+                    ? "bg-gradient-to-r from-blue-600/10 to-red-600/10 text-blue-600 shadow-[0_4px_15px_rgba(37,99,235,0.2)]"
+                    : "hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+                }
+              `}
+              onClick={() => setSidebarOpen(false)}
+            >
+              <i className="fas fa-file-pdf text-lg sm:text-xl w-5 text-center"></i>
+              <span className="text-sm sm:text-base">Export PDF</span>
             </Link>
           </div>
 
-          <div className="nav-item">
-            <a href="login.html" className="nav-link">
-              <i className="nav-icon fas fa-sign-out-alt"></i>
-              <span>Logout</span>
+          {/* Enquire - Added Here */}
+          <div className="mx-4 my-2">
+            <Link
+              to="/enquries"
+              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <i className="fas fa-question-circle text-lg sm:text-xl w-5 text-center"></i>
+              <span className="text-sm sm:text-base">Enquire</span>
+            </Link>
+          </div>
+
+          {/* Logout */}
+          <div className="mx-4 my-2">
+            <a
+              href="login.html"
+              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+            >
+              <i className="fas fa-sign-out-alt text-lg sm:text-xl w-5 text-center"></i>
+              <span className="text-sm sm:text-base">Logout</span>
             </a>
           </div>
         </nav>

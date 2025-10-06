@@ -16,17 +16,24 @@ const Login = ({ onLogin }) => {
     setErrorMessage("");
     setLoading(true);
 
-    // Simulate login delay, replace this with real login logic
-    setTimeout(() => {
-      // Here, you can validate email/password or role as needed
-      if (email === "superadmin@gmail.com" && password === "superadmin12345" && role === "superadmin") {
-        onLogin(); // Notify App that login succeeded
-        navigate("/"); // Navigate to dashboard/home
-      } else {
-        setErrorMessage("Invalid email or password");
-      }
+    if (!role || role === "user") {
+      setErrorMessage("Please select a valid role");
       setLoading(false);
-    }, 1000);
+      return;
+    }
+
+    if (
+      email === "superadmin@gmail.com" &&
+      password === "superadmin12345" &&
+      role === "superadmin"
+    ) {
+      onLogin(); // Notify parent component of successful login
+      navigate("/"); // Navigate to home/dashboard
+    } else {
+      setErrorMessage("Invalid email, password, or role");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -106,7 +113,9 @@ const Login = ({ onLogin }) => {
                 className="w-full py-3 px-5 rounded-xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300 transition duration-300 ease-in-out text-gray-900"
                 required
               >
-                <option value="user">Select</option>
+                <option value="user" disabled>
+                  Select
+                </option>
                 <option value="admin">Admin</option>
                 <option value="superadmin">Super Admin</option>
               </select>

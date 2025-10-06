@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { HiUsers } from "react-icons/hi2";
 import { HiPencil, HiTrash, HiEye } from "react-icons/hi";
+import ProfileButton from "./ProfileButton";
 
 const AgentList = () => {
   const [search, setSearch] = useState("");
@@ -48,21 +49,15 @@ const AgentList = () => {
   return (
     <div className="min-h-screen w-full px-4 sm:px-8 py-6 bg-[#f8fafc]">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-xl border border-[rgba(37,99,235,0.2)] rounded-2xl shadow-md mb-6 px-6 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
-        <div className="flex items-center text-blue-600 text-2xl font-bold gap-4">
-          <HiUsers className="text-[#2563eb] text-3xl" />
-          <span className="text-3xl font-bold">Agents</span>
-        </div>
-        <div className="flex items-center gap-4 w-full sm:w-auto">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-red-600 text-white flex items-center justify-center text-xl">
-            <i className="fas fa-user"></i>
-          </div>
-          <div>
-            <div className="font-semibold">Admin User</div>
-            <div className="text-sm text-gray-500">Administrator</div>
-          </div>
-        </div>
-      </header>
+     <header className="relative z-10 bg-white/90 backdrop-blur-xl border border-[rgba(37,99,235,0.2)] rounded-2xl shadow-md mb-6 px-6 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
+  <div className="flex items-center text-blue-600 text-2xl font-bold gap-4">
+    <HiUsers className="text-[#2563eb] text-3xl" />
+    <span className="text-3xl font-bold">Agents</span>
+  </div>
+  <div className="flex items-center gap-4 w-full sm:w-auto">
+    <ProfileButton />
+  </div>
+</header>
 
       {/* Search Input */}
       <div className="relative flex justify-end mb-6">
@@ -196,7 +191,9 @@ const AgentList = () => {
               </div>
             ))
           ) : (
-            <div className="text-center py-4 text-gray-500">No agents found.</div>
+            <div className="text-center py-4 text-gray-500">
+              No agents found.
+            </div>
           )}
         </div>
       </div>

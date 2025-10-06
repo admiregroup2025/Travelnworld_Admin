@@ -3,6 +3,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { FaCalendarAlt, FaFileExport, FaEye, FaDownload } from "react-icons/fa";
 import { MdPeopleAlt } from "react-icons/md";
 import { TbCategoryFilled } from "react-icons/tb";
+import ProfileButton from "./ProfileButton";
 
 const ExportData = () => {
   const [dateFrom, setDateFrom] = useState("");
@@ -46,9 +47,17 @@ const ExportData = () => {
   return (
     <div className="w-full min-h-screen bg-white px-4 py-6 sm:px-8 rounded-2xl max-w-7xl mx-auto">
       {/* Header with shadow */}
-      <div className="flex items-center gap-2 px-5 py-7 shadow-md bg-white rounded-md">
-        <IoSettingsSharp className="text-3xl text-blue-600 font-bold" />
-        <h1 className="text-3xl font-bold text-blue-600">Export Configuration</h1>
+      <div className="bg-white/90 backdrop-blur-[15px] p-4 sm:p-6 rounded-[20px] border border-blue-600/20 mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
+        {/* Left: Icon and Title */}
+        <div className="flex items-center gap-3 sm:gap-4 text-blue-600 text-xl sm:text-2xl lg:text-[2rem] font-bold">
+          <IoSettingsSharp className="text-[1.8rem] sm:text-[2rem]" />
+          <h1>Export Configuration</h1>
+        </div>
+
+        {/* Right: Profile Button */}
+        <div className="flex items-center gap-3 z-10 sm:gap-4">
+          <ProfileButton />
+        </div>
       </div>
 
       {/* Form */}
@@ -58,7 +67,9 @@ const ExportData = () => {
           <div className="flex flex-col gap-3 w-full lg:w-1/2">
             <div className="flex items-center gap-2">
               <FaCalendarAlt className="text-xl text-gray-600" />
-              <h2 className="font-semibold text-xl text-gray-800">Date Range</h2>
+              <h2 className="font-semibold text-xl text-gray-800">
+                Date Range
+              </h2>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-2">
               <input

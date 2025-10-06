@@ -1,40 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import ProfileButton from "./ProfileButton";
 
 export default function AdminDashboard() {
-  // const [sidebarOpen, setSidebarOpen] = useState(false);
-
   useEffect(() => {
     createParticles();
-
-    const handleResize = () => {
-      if (window.innerWidth > 1024) {
-        setSidebarOpen(false);
-      }
-    };
-
-    const handleClickOutside = (e) => {
-      if (window.innerWidth <= 1024) {
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("mobileMenuToggle");
-        if (
-          sidebar &&
-          toggle &&
-          !sidebar.contains(e.target) &&
-          !toggle.contains(e.target)
-        ) {
-          setSidebarOpen(false);
-        }
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      document.removeEventListener("click", handleClickOutside);
-    };
   }, []);
 
   const createParticles = () => {
@@ -46,7 +16,8 @@ export default function AdminDashboard() {
 
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement("div");
-      particle.className = "bg-particle";
+      particle.className =
+        "absolute rounded-full opacity-[0.03] animate-float bg-blue-600";
 
       const size = Math.random() * 4 + 2;
       particle.style.width = size + "px";
@@ -63,371 +34,45 @@ export default function AdminDashboard() {
   return (
     <>
       <style>{`
-        :root {
-          --primary-color: #2563eb;
-          --secondary-color: #dc2626;
-          --accent-color: #059669;
-          --dark-bg: #ffffff;
-          --card-bg: rgba(255,255,255,0.9);
-          --text-primary: #1f2937;
-          --text-secondary: #6b7280;
-          --glass-border: rgba(37, 99, 235, 0.2);
-          --sidebar-bg: rgba(255,255,255,0.95);
-          --hover-bg: rgba(37, 99, 235, 0.1);
-        }
-
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        body {
-          font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          background: #f8fafc;
-          color: var(--text-primary);
-          overflow-x: hidden;
-          line-height: 1.6;
-        }
-
-        .animated-bg {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: -1;
-          overflow: hidden;
-        }
-
-        .bg-particle {
-          position: absolute;
-          background: var(--primary-color);
-          border-radius: 50%;
-          opacity: 0.03;
-          animation: float 8s ease-in-out infinite;
-        }
-
         @keyframes float {
           0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.03; }
           50% { transform: translateY(-100px) rotate(180deg); opacity: 0.08; }
         }
 
-        .dashboard {
-          display: flex;
-          min-height: 100vh;
+        .animate-float {
+          animation: float 8s ease-in-out infinite;
         }
 
-        .sidebar {
-          width: 280px;
-          background: var(--sidebar-bg);
-          backdrop-filter: blur(15px);
-          border-right: 1px solid var(--glass-border);
-          position: fixed;
-          min-height: 100vh;
-          overflow-y: auto;
-          z-index: 1000;
-          transition: all 0.3s ease;
-          box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar-header {
-          padding: 2rem 1.5rem;
-          border-bottom: 1px solid var(--glass-border);
-          text-align: center;
-        }
-
-        .admin-logo {
-          font-size: 2rem;
-          font-weight: 800;
-          color: var(--primary-color);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .admin-logo i {
-          animation: rotate 3s linear infinite;
-        }
-
-        @keyframes rotate {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-
-        .admin-title {
-          font-size: 0.9rem;
-          color: var(--text-secondary);
-          font-weight: 500;
-        }
-
-        .nav-menu {
-          padding: 1rem 0;
-        }
-
-        .nav-item {
-          margin: 0.5rem 1rem;
-        }
-
-        .nav-link {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding: 1rem 1.5rem;
-          color: var(--text-primary);
-          text-decoration: none;
-          border-radius: 12px;
-          transition: all 0.3s ease;
+        .stat-card-before {
           position: relative;
           overflow: hidden;
         }
 
-        .nav-link::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-          opacity: 0.1;
-          transition: left 0.3s ease;
-        }
-
-        .nav-link:hover::before {
-          left: 0;
-        }
-
-        .nav-link:hover {
-          background: var(--hover-bg);
-          color: var(--primary-color);
-          transform: translateX(5px);
-        }
-
-        .nav-link.active {
-          background: linear-gradient(45deg, rgba(37, 99, 235, 0.1), rgba(220, 38, 38, 0.1));
-          color: var(--primary-color);
-          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
-        }
-
-        .nav-icon {
-          font-size: 1.2rem;
-          width: 20px;
-          text-align: center;
-        }
-
-        .main-content {
-          flex: 1;
-          margin-left: 280px;
-          padding: 2rem;
-          min-height: 100vh;
-        }
-
-        .content-header {
-          background: rgba(255,255,255,0.9);
-          backdrop-filter: blur(15px);
-          padding: 1.5rem 2rem;
-          border-radius: 20px;
-          border: 1px solid var(--glass-border);
-          margin-bottom: 2rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .page-title {
-          font-size: 2rem;
-          font-weight: 700;
-          color: var(--primary-color);
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
-        .user-info {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
-        .user-avatar {
-          width: 50px;
-          height: 50px;
-          background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 1.2rem;
-        }
-
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 1.5rem;
-          margin-bottom: 3rem;
-        }
-
-        .stat-card {
-          background: rgba(255,255,255,0.9);
-          backdrop-filter: blur(15px);
-          border: 1px solid var(--glass-border);
-          border-radius: 20px;
-          padding: 2rem;
-          text-align: center;
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-          cursor: pointer;
-        }
-
-        .stat-card::before {
+        .stat-card-before::before {
           content: '';
           position: absolute;
           top: 0;
           left: 0;
           width: 100%;
           height: 4px;
-          background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .stat-card:hover {
-          transform: translateY(-5px) scale(1.02);
-          box-shadow: 0 15px 35px rgba(37, 99, 235, 0.15);
-        }
-
-        .stat-icon {
-          font-size: 3rem;
-          color: var(--primary-color);
-          margin-bottom: 1rem;
-        }
-
-        .stat-number {
-          font-size: 2.5rem;
-          font-weight: 800;
-          color: var(--primary-color);
-          display: block;
-          margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-          color: var(--text-secondary);
-          font-weight: 500;
-        }
-
-        .card {
-          background: rgba(255,255,255,0.9);
-          backdrop-filter: blur(15px);
-          border: 1px solid var(--glass-border);
-          border-radius: 20px;
-          padding: 2rem;
-          margin-bottom: 2rem;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-          transition: all 0.3s ease;
-        }
-
-        .card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
-        }
-
-        .card-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1.5rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid var(--glass-border);
-        }
-
-        .card-title {
-          font-size: 1.5rem;
-          font-weight: 600;
-          color: var(--primary-color);
-        }
-
-        .table-container {
-          background: rgba(255,255,255,0.9);
-          border-radius: 15px;
-          overflow: hidden;
-          border: 1px solid var(--glass-border);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .data-table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        .data-table th,
-        .data-table td {
-          padding: 1rem 1.5rem;
-          text-align: left;
-          border-bottom: 1px solid rgba(37, 99, 235, 0.1);
-        }
-
-        .data-table th {
-          background: linear-gradient(45deg, rgba(37, 99, 235, 0.1), rgba(220, 38, 38, 0.1));
-          color: var(--primary-color);
-          font-weight: 600;
-        }
-
-        .data-table tr:hover {
-          background: rgba(37, 99, 235, 0.05);
-        }
-
-        @media (max-width: 1024px) {
-          .sidebar {
-            transform: translateX(-100%);
-          }
-
-          .sidebar.open {
-            transform: translateX(0);
-          }
-
-          .main-content {
-            margin-left: 0;
-          }
-
-          .mobile-menu-toggle {
-            display: block !important;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1100;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-          }
+          background: linear-gradient(45deg, rgb(37, 99, 235), rgb(220, 38, 38));
         }
 
         @media (max-width: 768px) {
-          .main-content {
-            padding: 1rem;
+          .mobile-card {
+            display: block !important;
           }
-
-          .content-header {
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
-          }
-
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
+          .desktop-table {
+            display: none !important;
           }
         }
 
-        @media (max-width: 480px) {
-          .stats-grid {
-            grid-template-columns: 1fr;
+        @media (min-width: 769px) {
+          .mobile-card {
+            display: none !important;
+          }
+          .desktop-table {
+            display: table !important;
           }
         }
       `}</style>
@@ -437,126 +82,149 @@ export default function AdminDashboard() {
         rel="stylesheet"
       />
 
-      <div className="animated-bg" id="animatedBg"></div>
+      <div
+        className="fixed top-0 left-0 w-full h-full -z-[1] overflow-hidden bg-slate-50"
+        id="animatedBg"
+      ></div>
 
-      <button
-        className="mobile-menu-toggle"
-        id="mobileMenuToggle"
-        style={{ display: window.innerWidth <= 1024 ? "block" : "none" }}
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        <i className="fas fa-bars"></i>
-      </button>
+      <div className="relative min-h-screen">
+        <main className="w-full p-4 sm:p-6 lg:p-8 min-h-screen">
+          {/* Header - Responsive */}
+     <header className="bg-white/90 backdrop-blur-[15px] p-4 sm:p-6 rounded-[20px] border border-blue-600/20 mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] relative z-10">
+  <div className="text-xl sm:text-2xl lg:text-[2rem] font-bold text-blue-600 flex items-center gap-3 sm:gap-4">
+  <i className="fas fa-map-marked-alt text-lg sm:text-xl w-5 text-center"></i>    <span>Dashboard</span>
+  </div>
+  <div className="flex items-center gap-3 sm:gap-4">
+    <ProfileButton />
+  </div>
+</header>
 
-      <div className="dashboard">
-        <main className="main-content">
-          <header className="content-header">
-            <div className="page-title">
-              <i className="fas fa-tachometer-alt"></i>
-              <span>Dashboard</span>
-            </div>
-            <div className="user-info">
-              <div className="user-avatar">
-                <i className="fas fa-user"></i>
-              </div>
-              <div>
-                <div style={{ fontWeight: 600 }}>Admin User</div>
-                <div
-                  style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}
-                >
-                  Administrator
-                </div>
-              </div>
-            </div>
-          </header>
-
-          <div className="stats-grid">
-            <div className="stat-card">
-              <div className="stat-icon">
+          {/* Stats Grid - Responsive */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
+            <Link
+              to={"/allusers"}
+              className="stat-card-before bg-white/90 backdrop-blur-[15px] border border-blue-600/20 rounded-[20px] p-6 sm:p-8 text-center transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_15px_35px_rgba(37,99,235,0.15)]"
+            >
+              <div className="text-4xl sm:text-5xl text-blue-600 mb-3 sm:mb-4">
                 <i className="fas fa-users"></i>
               </div>
-              <span className="stat-number">15</span>
-              <div className="stat-label">Total Employees</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">
+              <span className="text-[2rem] sm:text-[2.5rem] font-extrabold text-blue-600 block mb-2">
+                15
+              </span>
+              <div className="text-sm sm:text-base text-gray-500 font-medium">
+                Total Employees
+              </div>
+            </Link>
+            <Link
+              to={"/allagents"}
+              className="stat-card-before bg-white/90 backdrop-blur-[15px] border border-blue-600/20 rounded-[20px] p-6 sm:p-8 text-center transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_15px_35px_rgba(37,99,235,0.15)]"
+            >
+              <div className="text-4xl sm:text-5xl text-blue-600 mb-3 sm:mb-4">
                 <i className="fas fa-user-shield"></i>
               </div>
-              <span className="stat-number">4</span>
-              <div className="stat-label">Agents</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">
+              <span className="text-[2rem] sm:text-[2.5rem] font-extrabold text-blue-600 block mb-2">
+                4
+              </span>
+              <div className="text-sm sm:text-base text-gray-500 font-medium">
+                Agents
+              </div>
+            </Link>
+            <div className="stat-card-before bg-white/90 backdrop-blur-[15px] border border-blue-600/20 rounded-[20px] p-6 sm:p-8 text-center transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_15px_35px_rgba(37,99,235,0.15)]">
+              <div className="text-4xl sm:text-5xl text-blue-600 mb-3 sm:mb-4">
                 <i className="fas fa-user-cog"></i>
               </div>
-              <span className="stat-number">3</span>
-              <div className="stat-label">Admin Users</div>
+              <span className="text-[2rem] sm:text-[2.5rem] font-extrabold text-blue-600 block mb-2">
+                3
+              </span>
+              <div className="text-sm sm:text-base text-gray-500 font-medium">
+                Admin Users
+              </div>
             </div>
-            <div className="stat-card">
-              <div className="stat-icon">
+            <div className="stat-card-before bg-white/90 backdrop-blur-[15px] border border-blue-600/20 rounded-[20px] p-6 sm:p-8 text-center transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_15px_35px_rgba(37,99,235,0.15)]">
+              <div className="text-4xl sm:text-5xl text-blue-600 mb-3 sm:mb-4">
                 <i className="fas fa-chart-line"></i>
               </div>
-              <span className="stat-number">99%</span>
-              <div className="stat-label">Successful Clients</div>
+              <span className="text-[2rem] sm:text-[2.5rem] font-extrabold text-blue-600 block mb-2">
+                99%
+              </span>
+              <div className="text-sm sm:text-base text-gray-500 font-medium">
+                Successful Clients
+              </div>
             </div>
           </div>
 
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Recent Activities</h3>
+          {/* Recent Activities - Responsive Table/Cards */}
+          <div className="bg-white/90 backdrop-blur-[15px] border border-blue-600/20 rounded-[20px] p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(37,99,235,0.15)]">
+            <div className="flex justify-between items-center mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-blue-600/20">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-blue-600">
+                Recent Activities
+              </h3>
             </div>
-            <div className="table-container">
-              <table className="data-table">
+
+            {/* Desktop Table View */}
+            <div className="desktop-table bg-white/90 rounded-[15px] overflow-x-auto border border-blue-600/20 shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-full">
+              <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    <th>Activity</th>
-                    <th>User</th>
-                    <th>Time</th>
-                    <th>Status</th>
+                    <th className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 bg-gradient-to-r from-blue-600/10 to-red-600/10 text-blue-600 font-semibold text-sm sm:text-base">
+                      Activity
+                    </th>
+                    <th className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 bg-gradient-to-r from-blue-600/10 to-red-600/10 text-blue-600 font-semibold text-sm sm:text-base">
+                      User
+                    </th>
+                    <th className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 bg-gradient-to-r from-blue-600/10 to-red-600/10 text-blue-600 font-semibold text-sm sm:text-base">
+                      Time
+                    </th>
+                    <th className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 bg-gradient-to-r from-blue-600/10 to-red-600/10 text-blue-600 font-semibold text-sm sm:text-base">
+                      Status
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>New employee added</td>
-                    <td>Admin User</td>
-                    <td>2 hours ago</td>
-                    <td>
-                      <span
-                        style={{
-                          color: "var(--accent-color)",
-                          fontWeight: 600,
-                        }}
-                      >
+                  <tr className="hover:bg-blue-600/5">
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      New employee added
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      Admin User
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      2 hours ago
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10">
+                      <span className="text-emerald-600 font-semibold text-sm sm:text-base">
                         ✓ Success
                       </span>
                     </td>
                   </tr>
-                  <tr>
-                    <td>Team member updated</td>
-                    <td>Admin User</td>
-                    <td>5 hours ago</td>
-                    <td>
-                      <span
-                        style={{
-                          color: "var(--accent-color)",
-                          fontWeight: 600,
-                        }}
-                      >
+                  <tr className="hover:bg-blue-600/5">
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      Team member updated
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      Admin User
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      5 hours ago
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10">
+                      <span className="text-emerald-600 font-semibold text-sm sm:text-base">
                         ✓ Success
                       </span>
                     </td>
                   </tr>
-                  <tr>
-                    <td>PDF report generated</td>
-                    <td>Admin User</td>
-                    <td>1 day ago</td>
-                    <td>
-                      <span
-                        style={{
-                          color: "var(--accent-color)",
-                          fontWeight: 600,
-                        }}
-                      >
+                  <tr className="hover:bg-blue-600/5">
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      PDF report generated
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      Admin User
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10 text-sm sm:text-base">
+                      1 day ago
+                    </td>
+                    <td className="p-3 sm:p-4 lg:px-6 text-left border-b border-blue-600/10">
+                      <span className="text-emerald-600 font-semibold text-sm sm:text-base">
                         ✓ Success
                       </span>
                     </td>
@@ -564,108 +232,112 @@ export default function AdminDashboard() {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="mobile-card space-y-4">
+              <div className="bg-white rounded-[15px] border border-blue-600/20 p-4 shadow-sm">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="font-semibold text-blue-600">
+                    New employee added
+                  </div>
+                  <span className="text-emerald-600 font-semibold text-sm">
+                    ✓ Success
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <div>
+                    <span className="font-medium">User:</span> Admin User
+                  </div>
+                  <div>
+                    <span className="font-medium">Time:</span> 2 hours ago
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-[15px] border border-blue-600/20 p-4 shadow-sm">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="font-semibold text-blue-600">
+                    Team member updated
+                  </div>
+                  <span className="text-emerald-600 font-semibold text-sm">
+                    ✓ Success
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <div>
+                    <span className="font-medium">User:</span> Admin User
+                  </div>
+                  <div>
+                    <span className="font-medium">Time:</span> 5 hours ago
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-[15px] border border-blue-600/20 p-4 shadow-sm">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="font-semibold text-blue-600">
+                    PDF report generated
+                  </div>
+                  <span className="text-emerald-600 font-semibold text-sm">
+                    ✓ Success
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <div>
+                    <span className="font-medium">User:</span> Admin User
+                  </div>
+                  <div>
+                    <span className="font-medium">Time:</span> 1 day ago
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Quick Actions</h3>
+          {/* Quick Actions - Responsive Grid */}
+          <div className="bg-white/90 backdrop-blur-[15px] border border-blue-600/20 rounded-[20px] p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(37,99,235,0.15)]">
+            <div className="flex justify-between items-center mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-blue-600/20">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-blue-600">
+                Quick Actions
+              </h3>
             </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                gap: "1rem",
-              }}
-            >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               <a
                 href="manage-employees.html"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "1rem",
-                  padding: "1.5rem",
-                  background:
-                    "linear-gradient(45deg, rgba(37, 99, 235, 0.1), rgba(220, 38, 38, 0.1))",
-                  borderRadius: "15px",
-                  textDecoration: "none",
-                  color: "var(--primary-color)",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.05)")
-                }
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
+                className="flex items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-br from-blue-600/10 to-red-600/10 rounded-[15px] no-underline text-blue-600 transition-all duration-300 hover:scale-105"
               >
-                <i
-                  className="fas fa-user-plus"
-                  style={{ fontSize: "2rem" }}
-                ></i>
-                <div>
-                  <div style={{ fontWeight: 600 }}>Add Employee</div>
-                  <div style={{ fontSize: "0.9rem", opacity: 0.8 }}>
+                <i className="fas fa-user-plus text-xl sm:text-[2rem]"></i>
+                <div className="flex-1">
+                  <div className="font-semibold text-sm sm:text-base">
+                    Add Employee
+                  </div>
+                  <div className="text-xs sm:text-sm opacity-80">
                     Quick employee registration
                   </div>
                 </div>
               </a>
               <a
                 href="manage-team.html"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "1rem",
-                  padding: "1.5rem",
-                  background:
-                    "linear-gradient(45deg, rgba(5, 150, 105, 0.1), rgba(37, 99, 235, 0.1))",
-                  borderRadius: "15px",
-                  textDecoration: "none",
-                  color: "var(--accent-color)",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.05)")
-                }
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
+                className="flex items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-br from-emerald-600/10 to-blue-600/10 rounded-[15px] no-underline text-emerald-600 transition-all duration-300 hover:scale-105"
               >
-                <i
-                  className="fas fa-users-cog"
-                  style={{ fontSize: "2rem" }}
-                ></i>
-                <div>
-                  <div style={{ fontWeight: 600 }}>Manage Team</div>
-                  <div style={{ fontSize: "0.9rem", opacity: 0.8 }}>
+                <i className="fas fa-users-cog text-xl sm:text-[2rem]"></i>
+                <div className="flex-1">
+                  <div className="font-semibold text-sm sm:text-base">
+                    Manage Team
+                  </div>
+                  <div className="text-xs sm:text-sm opacity-80">
                     Update team members
                   </div>
                 </div>
               </a>
               <a
                 href="export-data.html"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "1rem",
-                  padding: "1.5rem",
-                  background:
-                    "linear-gradient(45deg, rgba(220, 38, 38, 0.1), rgba(5, 150, 105, 0.1))",
-                  borderRadius: "15px",
-                  textDecoration: "none",
-                  color: "var(--secondary-color)",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.05)")
-                }
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
+                className="flex items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-br from-red-600/10 to-emerald-600/10 rounded-[15px] no-underline text-red-600 transition-all duration-300 hover:scale-105 sm:col-span-2 lg:col-span-1"
               >
-                <i className="fas fa-download" style={{ fontSize: "2rem" }}></i>
-                <div>
-                  <div style={{ fontWeight: 600 }}>Export Data</div>
-                  <div style={{ fontSize: "0.9rem", opacity: 0.8 }}>
+                <i className="fas fa-download text-xl sm:text-[2rem]"></i>
+                <div className="flex-1">
+                  <div className="font-semibold text-sm sm:text-base">
+                    Export Data
+                  </div>
+                  <div className="text-xs sm:text-sm opacity-80">
                     Generate PDF reports
                   </div>
                 </div>

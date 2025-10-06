@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ProfileButton from "./ProfileButton";
 import { HiUsers } from "react-icons/hi2";
 
-const AddAgentForm = () => {
+const AddUserForm = () => {
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -21,8 +21,8 @@ const AddAgentForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting agent data:", formData);
-    // You can later replace this with API call
+    console.log("Submitting user data:", formData);
+    // You can later replace this with your API call
   };
 
   return (
@@ -31,7 +31,7 @@ const AddAgentForm = () => {
       <header className="relative z-10 bg-white/90 backdrop-blur-xl border border-[rgba(37,99,235,0.2)] rounded-2xl shadow-md mb-6 px-6 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
         <div className="flex items-center text-blue-600 text-2xl font-bold gap-4">
           <HiUsers className="text-[#2563eb] text-3xl" />
-          <span className="text-3xl font-bold">Agents</span>
+          <span className="text-3xl font-bold">Add User</span>
         </div>
         <div className="flex items-center gap-4 w-full sm:w-auto">
           <ProfileButton />
@@ -74,24 +74,23 @@ const AddAgentForm = () => {
           </div>
         </div>
 
-        {/* Row 2: Email & Phone */}
+        {/* Row 2: Email */}
         <div className="flex flex-col sm:flex-row justify-between gap-6">
-          <div className="flex flex-col w-full max-w-md">
-            <label htmlFor="email" className="text-sm font-medium text-gray-700 mb-1">
-              Email <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter agent email"
-              required
-              className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
+         <div className="flex flex-col w-full max-w-md">
+          <label htmlFor="email" className="text-sm font-medium text-gray-700 mb-1">
+            Email <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter user email"
+            required
+            className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
           <div className="flex flex-col w-full max-w-md">
             <label htmlFor="phone" className="text-sm font-medium text-gray-700 mb-1">
               Phone Number <span className="text-red-500">*</span>
@@ -106,11 +105,12 @@ const AddAgentForm = () => {
               className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-        </div>
+       </div>
 
+        {/* Row 3: Password */}
         <div className="flex flex-col w-full max-w-md">
           <label htmlFor="password" className="text-sm font-medium text-gray-700 mb-1">
-            Create Password <span className="text-red-500">*</span>
+            Password <span className="text-red-500">*</span>
           </label>
           <input
             type="password"
@@ -124,16 +124,16 @@ const AddAgentForm = () => {
           />
         </div>
 
-        {/* Submit */}
+        {/* Submit Button */}
         <button
           type="submit"
           className="cursor-pointer bg-blue-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-blue-700 transition w-full max-w-md"
         >
-          Save Agent
+          Save User
         </button>
       </form>
     </div>
   );
 };
 
-export default AddAgentForm;
+export default AddUserForm;
