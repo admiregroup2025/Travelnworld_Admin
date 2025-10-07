@@ -5,8 +5,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
 
   const [dropdownState, setDropdownState] = useState({
-    user: false,
+    admin: false,
     itineraries: false,
+    bannerAds: false,
     agent: false,
   });
 
@@ -130,23 +131,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
-                  user: !prev.user,
+                  admin: !prev.admin,
                 }))
               }
             >
               <div className="flex items-center gap-4">
                 <i className="fas fa-user-cog text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base">User</span>
+                <span className="text-sm sm:text-base">Admin</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
-                  dropdownState.user ? "rotate-90" : ""
+                  dropdownState.admin ? "rotate-90" : ""
                 }`}
               ></i>
             </div>
             <div
               className={`pl-6 overflow-hidden transition-all duration-300 ${
-                dropdownState.user ? "max-h-[500px]" : "max-h-0"
+                dropdownState.admin ? "max-h-[500px]" : "max-h-0"
               }`}
             >
               <Link
@@ -158,7 +159,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
-                All Users
+                All admin
               </Link>
               <Link
                 to="/adduser"
@@ -169,7 +170,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
-                Add User
+                Add admin
               </Link>
             </div>
           </div>
@@ -252,7 +253,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }`}
             >
               <Link
-                to="/itineraries"
+                to="/itinerary"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/itineraries")
                     ? "text-blue-600 bg-blue-600/10 font-medium"
@@ -262,7 +263,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               >
                 All Itineraries
               </Link>
-              <Link
+              {/* <Link
                 to="/additineraries"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/itineraries/add")
@@ -272,7 +273,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 onClick={() => setSidebarOpen(false)}
               >
                 Add Itinerary
-              </Link>
+              </Link> */}
               <Link
                 to="/itineraries/form"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
@@ -308,6 +309,58 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               <span className="text-sm sm:text-base">Team Management</span>
             </a>
           </div>
+          {/* Banners */}
+          <div className="mx-4 my-2">
+            <div
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              onClick={() =>
+                setDropdownState((prev) => ({
+                  ...prev,
+                  bannerAds: !prev.bannerAds,
+                }))
+              }
+            >
+              <div className="flex items-center gap-4">
+                <i className="fas fa-ad text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base">Banner Ads</span>
+              </div>
+              <i
+                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
+                  dropdownState.bannerAds ? "rotate-90" : ""
+                }`}
+              ></i>
+            </div>
+
+              <div
+                className={`pl-6 overflow-hidden transition-all duration-300 ${
+                  dropdownState.bannerAds ? "max-h-[500px]" : "max-h-0"
+                }`}
+              >
+                <Link
+                  to="/topbanner"
+                  className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                    isActive("/bannerads/home-top")
+                      ? "text-blue-600 bg-blue-600/10 font-medium"
+                      : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                  }`}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  Home Top Banner
+                </Link>
+
+                <Link
+                  to="/bannerads/manage"
+                  className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                    isActive("/bannerads/manage")
+                      ? "text-blue-600 bg-blue-600/10 font-medium"
+                      : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                  }`}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  Manage Banner Ads
+                </Link>
+              </div>
+            </div>
 
           {/* Export PDF */}
           <div className="mx-4 my-2">

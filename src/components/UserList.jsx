@@ -52,7 +52,7 @@ const UserList = () => {
       <header className="bg-white/90 backdrop-blur-[15px] p-4 sm:p-6 rounded-[20px] border border-blue-600/20 mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] relative z-10">
         <div className="text-xl sm:text-2xl lg:text-[2rem] font-bold text-blue-600 flex items-center gap-3 sm:gap-4">
         <HiUsers/>
-          <span>User</span>
+          <span>Admin</span>
         </div>
         <div className="flex items-center gap-3 sm:gap-4">
           <ProfileButton />

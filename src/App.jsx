@@ -17,6 +17,8 @@ import ProfileButton from "./components/ProfileButton";
 import Additineraries from "./components/AddItineraries";
 import AddUserForm from "./components/AddUserForm";
 import Enquiry from "./components/Enquiry";
+import Itinerary from "./pages/Itinerary";
+import HomeTopBanner from "./pages/HomeTopBanner";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -87,6 +89,8 @@ const App = () => {
                     <Route path="/addagent" element={<AddAgentForm />} />
                     <Route path="/exportdata" element={<ExportData />} />
                     <Route path="*" element={<Navigate to="/" />} />
+                    <Route path="/itinerary" element={<Itinerary />} />
+                    <Route path="/topbanner" element={<HomeTopBanner />} />
                     <Route
                       path="/additineraries"
                       element={<Additineraries />}
