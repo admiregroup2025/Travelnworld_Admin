@@ -6,12 +6,12 @@ const Login = ({ onLogin }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState("superadmin");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setLoading(true);
@@ -22,18 +22,30 @@ const Login = ({ onLogin }) => {
       return;
     }
 
-    if (
-      email === "superadmin@gmail.com" &&
-      password === "superadmin12345" &&
-      role === "superadmin"
-    ) {
-      onLogin(); // Notify parent component of successful login
-      navigate("/"); // Navigate to home/dashboard
-    } else {
-      setErrorMessage("Invalid email, password, or role");
-    }
+    try {
+      const apiBase = import.meta.env.VITE_API_BASE || "";
+      const response = await fetch(`${apiBase}/api/adminslogincredentials/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, role }),
+      });
 
-    setLoading(false);
+      const result = await response.json();
+
+      if (!response.ok) {
+        setErrorMessage(result.message || "Invalid email, password, or role");
+      } else {
+        onLogin();
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+      setErrorMessage("Unable to login. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
