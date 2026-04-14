@@ -21,8 +21,16 @@ import Itinerary from "./pages/Itinerary";
 import HomeTopBanner from "./pages/HomeTopBanner";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    Boolean(localStorage.getItem("token"))
+  );
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   // Handle sidebar visibility on resize
   useEffect(() => {

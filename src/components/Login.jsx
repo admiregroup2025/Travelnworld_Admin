@@ -37,8 +37,13 @@ const Login = ({ onLogin }) => {
       if (!response.ok) {
         setErrorMessage(result.message || "Invalid email, password, or role");
       } else {
-        onLogin();
-        navigate("/");
+       
+      localStorage.setItem("token", result.token);
+
+              console.log("TOKEN SAVED:", result.token);
+
+         onLogin();
+            navigate("/");
       }
     } catch (error) {
       console.error("Login failed", error);
