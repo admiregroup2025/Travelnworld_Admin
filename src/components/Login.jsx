@@ -40,7 +40,7 @@ const Login = ({ onLogin }) => {
        
       localStorage.setItem("token", result.token);
 
-              console.log("TOKEN SAVED:", result.token);
+             // console.log("TOKEN SAVED:", result.token);
 
          onLogin();
             navigate("/");

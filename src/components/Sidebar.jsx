@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [dropdownState, setDropdownState] = useState({
     admin: false,
@@ -10,6 +13,34 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     bannerAds: false,
     agent: false,
   });
+
+  const handleLogout = async (e) => {
+    e.preventDefault(); 
+    
+    try {
+      // Call  backend logout route
+      const response = await fetch('/api/auth/logout', { // Adjust URL to your API path
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}` // If using Bearer tokens
+        }
+      });
+
+      if (response.ok) {
+        // 2. Clear local storage/session storage
+        localStorage.removeItem('token'); // Or whatever key you use
+        localStorage.removeItem('user');
+        
+        // 3. Redirect to login page
+        navigate('/login'); 
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Fallback: clear local data and redirect anyway
+      localStorage.clear();
+      navigate('/login');
+    }
+  }
 
   const isActive = (path) => location.pathname === path;
 
@@ -398,14 +429,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
           {/* Logout */}
           <div className="mx-4 my-2">
-            <a
-              href="login.html"
-              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
-            >
-              <i className="fas fa-sign-out-alt text-lg sm:text-xl w-5 text-center"></i>
-              <span className="text-sm sm:text-base">Logout</span>
-            </a>
-          </div>
+        <button
+          onClick={handleLogout}
+          className="w-full nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
+        >
+          <i className="fas fa-sign-out-alt text-lg sm:text-xl w-5 text-center"></i>
+          <span className="text-sm sm:text-base">Logout</span>
+        </button>
+      </div>
         </nav>
       </aside>
     </>

@@ -1,34 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { HiUsers } from "react-icons/hi2";
 import { HiPencil, HiTrash, HiEye } from "react-icons/hi";
 import ProfileButton from "./ProfileButton";
+import axios from "axios";
 
 const AgentList = () => {
+  const [agents, setAgents] = useState([]);
   const [search, setSearch] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  });
+  const [isSaving, setIsSaving] = useState(false);
 
-  const agents = [
-    {
-      name: "Evelyn Parker",
-      email: "evelyn.parker@example.com",
-      phone: "+1 (555) 222-3333",
-    },
-    {
-      name: "Frank Miller",
-      email: "frank.miller@example.com",
-      phone: "+1 (555) 444-5555",
-    },
-    {
-      name: "Grace Lee",
-      email: "grace.lee@example.com",
-      phone: "+1 (555) 666-7777",
-    },
-    {
-      name: "Henry Scott",
-      email: "henry.scott@example.com",
-      phone: "+1 (555) 888-9999",
-    },
-  ];
+  const fetchAgents = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const apiBase = import.meta.env.VITE_API_BASE || "";
+
+      const res = await axios.get(`${apiBase}/api/agents`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setAgents(res.data);
+    } catch (err) {
+      console.error("Error fetching agents", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgents();
+  }, []);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -40,11 +53,80 @@ const AgentList = () => {
     setShowSuggestions(false);
   };
 
-  const filteredAgents = agents.filter((agent) =>
-    `${agent.name} ${agent.email} ${agent.phone}`
+  const handleView = (agent) => {
+    setSelectedAgent(agent);
+  };
+
+  const handleCloseView = () => {
+    setSelectedAgent(null);
+  };
+
+  const handleEditClick = (agent) => {
+    setEditData({
+      firstName: agent.firstName || "",
+      lastName: agent.lastName || "",
+      email: agent.email || "",
+      phone: agent.phone || "",
+    });
+    setSelectedAgent(agent);
+    setShowEditModal(true);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveEdit = async (e) => {
+    e.preventDefault();
+    if (!selectedAgent) return;
+
+    setIsSaving(true);
+    try {
+      const token = localStorage.getItem("token");
+      const apiBase = import.meta.env.VITE_API_BASE || "";
+      await axios.put(`${apiBase}/api/agents/${selectedAgent._id}`, editData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      await fetchAgents();
+      setShowEditModal(false);
+      setSelectedAgent(null);
+    } catch (err) {
+      console.error("Error updating agent", err);
+      alert(err.response?.data?.message || "Unable to update agent");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async (agentId) => {
+    if (!window.confirm("Delete this agent?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const apiBase = import.meta.env.VITE_API_BASE || "";
+      await axios.delete(`${apiBase}/api/agents/${agentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      await fetchAgents();
+    } catch (err) {
+      console.error("Error deleting agent", err);
+      alert(err.response?.data?.message || "Unable to delete agent");
+    }
+  };
+
+  const filteredAgents = agents.filter((agent) => {
+    const agentName = `${agent.firstName || ""} ${agent.lastName || ""}`.trim();
+    return `${agentName} ${agent.email || ""} ${agent.phone || ""}`
       .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+      .includes(search.toLowerCase());
+  });
+
+  const getAgentName = (agent) => `${agent.firstName || ""} ${agent.lastName || ""}`.trim();
 
   return (
     <div className="min-h-screen w-full px-4 sm:px-8 py-6 bg-[#f8fafc]">
@@ -76,15 +158,18 @@ const AgentList = () => {
           {showSuggestions && search.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-200 shadow-md rounded-md w-full mt-1 max-h-40 overflow-y-auto">
               {filteredAgents.length > 0 ? (
-                filteredAgents.map((agent, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleSuggestionClick(agent.name)}
-                    className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm"
-                  >
-                    {agent.name}
-                  </li>
-                ))
+                filteredAgents.map((agent, index) => {
+                  const agentName = getAgentName(agent);
+                  return (
+                    <li
+                      key={index}
+                      onClick={() => handleSuggestionClick(agentName)}
+                      className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                    >
+                      {agentName}
+                    </li>
+                  );
+                })
               ) : (
                 <li className="px-4 py-2 text-gray-500 text-sm">
                   No agents found
@@ -108,36 +193,39 @@ const AgentList = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredAgents.map((agent, index) => (
-              <tr key={index} className="hover:bg-gray-100 transition">
-                <td className="py-3 px-4">{agent.name}</td>
-                <td className="py-3 px-4">{agent.email}</td>
-                <td className="py-3 px-4">{agent.phone}</td>
-                <td className="py-3 px-4 flex gap-3">
-                  <button
-                    className="text-blue-600 hover:text-blue-800 p-2 rounded"
-                    aria-label={`View ${agent.name}`}
-                    onClick={() => alert(`View agent: ${agent.name}`)}
-                  >
-                    <HiEye size={20} className="cursor-pointer" />
-                  </button>
-                  <button
-                    className="text-green-600 hover:text-green-800 p-2 rounded"
-                    aria-label={`Edit ${agent.name}`}
-                    onClick={() => alert(`Edit agent: ${agent.name}`)}
-                  >
-                    <HiPencil size={20} className="cursor-pointer" />
-                  </button>
-                  <button
-                    className="text-red-600 hover:text-red-800 p-2 rounded"
-                    aria-label={`Delete ${agent.name}`}
-                    onClick={() => alert(`Delete agent: ${agent.name}`)}
-                  >
-                    <HiTrash size={20} className="cursor-pointer" />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {filteredAgents.map((agent, index) => {
+              const agentName = getAgentName(agent);
+              return (
+                <tr key={index} className="hover:bg-gray-100 transition">
+                  <td className="py-3 px-4">{agentName}</td>
+                  <td className="py-3 px-4">{agent.email}</td>
+                  <td className="py-3 px-4">{agent.phone}</td>
+                  <td className="py-3 px-4 flex gap-3">
+                    <button
+                      className="text-blue-600 hover:text-blue-800 p-2 rounded"
+                      aria-label={`View ${agentName}`}
+                      onClick={() => handleView(agent)}
+                    >
+                      <HiEye size={20} className="cursor-pointer" />
+                    </button>
+                    <button
+                      className="text-green-600 hover:text-green-800 p-2 rounded"
+                      aria-label={`Edit ${agentName}`}
+                      onClick={() => handleEditClick(agent)}
+                    >
+                      <HiPencil size={20} className="cursor-pointer" />
+                    </button>
+                    <button
+                      className="text-red-600 hover:text-red-800 p-2 rounded"
+                      aria-label={`Delete ${agentName}`}
+                      onClick={() => handleDelete(agent._id)}
+                    >
+                      <HiTrash size={20} className="cursor-pointer" />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
             {filteredAgents.length === 0 && (
               <tr>
                 <td colSpan="4" className="text-center py-4 text-gray-500">
@@ -151,14 +239,16 @@ const AgentList = () => {
         {/* Card view for small screens */}
         <div className="flex flex-col space-y-4 md:hidden">
           {filteredAgents.length > 0 ? (
-            filteredAgents.map((agent, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl shadow-md p-4 flex flex-col space-y-2"
-              >
-                <div className="text-lg font-semibold text-[#2563eb]">
-                  {agent.name}
-                </div>
+            filteredAgents.map((agent, index) => {
+              const agentName = getAgentName(agent);
+              return (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-md p-4 flex flex-col space-y-2"
+                >
+                  <div className="text-lg font-semibold text-[#2563eb]">
+                    {agentName}
+                  </div>
                 <div className="text-sm text-gray-700">
                   <strong>Email:</strong> {agent.email}
                 </div>
@@ -168,28 +258,28 @@ const AgentList = () => {
                 <div className="flex gap-4 mt-2">
                   <button
                     className="text-blue-600 hover:text-blue-800 p-2 rounded"
-                    aria-label={`View ${agent.name}`}
-                    onClick={() => alert(`View agent: ${agent.name}`)}
+                    aria-label={`View ${agentName}`}
+                    onClick={() => handleView(agent)}
                   >
                     <HiEye size={20} className="cursor-pointer" />
                   </button>
                   <button
                     className="text-green-600 hover:text-green-800 p-2 rounded"
-                    aria-label={`Edit ${agent.name}`}
-                    onClick={() => alert(`Edit agent: ${agent.name}`)}
+                    aria-label={`Edit ${agentName}`}
+                    onClick={() => handleEditClick(agent)}
                   >
                     <HiPencil size={20} className="cursor-pointer" />
                   </button>
                   <button
                     className="text-red-600 hover:text-red-800 p-2 rounded"
-                    aria-label={`Delete ${agent.name}`}
-                    onClick={() => alert(`Delete agent: ${agent.name}`)}
+                    aria-label={`Delete ${agentName}`}
+                    onClick={() => handleDelete(agent._id)}
                   >
                     <HiTrash size={20} className="cursor-pointer" />
                   </button>
                 </div>
               </div>
-            ))
+            )})
           ) : (
             <div className="text-center py-4 text-gray-500">
               No agents found.
@@ -197,6 +287,168 @@ const AgentList = () => {
           )}
         </div>
       </div>
+
+      {selectedAgent && !showEditModal && (
+        <div className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <h2 className="text-2xl font-semibold text-[#1e3a8a]">Agent Details</h2>
+                <p className="text-sm text-gray-500">Full record from the database</p>
+              </div>
+              <button
+                className="text-gray-500 hover:text-gray-900"
+                onClick={handleCloseView}
+                aria-label="Close details"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-1">
+                <p className="text-sm text-gray-500">Name</p>
+                <p className="font-medium text-gray-900">{getAgentName(selectedAgent) || "N/A"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-gray-500">Email</p>
+                <p className="font-medium text-gray-900">{selectedAgent.email || "N/A"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-gray-500">Phone</p>
+                <p className="font-medium text-gray-900">{selectedAgent.phone || "N/A"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-gray-500">Role</p>
+                <p className="font-medium text-gray-900">{selectedAgent.role || "N/A"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-gray-500">Active</p>
+                <p className="font-medium text-gray-900">{selectedAgent.isActive ? "Yes" : "No"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-gray-500">Verified</p>
+                <p className="font-medium text-gray-900">{selectedAgent.isVerified ? "Yes" : "No"}</p>
+              </div>
+              {selectedAgent.company && (
+                <div className="space-y-1 sm:col-span-2">
+                  <p className="text-sm text-gray-500">Company</p>
+                  <p className="font-medium text-gray-900">{selectedAgent.company}</p>
+                </div>
+              )}
+              <div className="space-y-1 sm:col-span-2">
+                <p className="text-sm text-gray-500">Registered Email</p>
+                <p className="font-medium text-gray-900">{selectedAgent.registeredEmail || "N/A"}</p>
+              </div>
+              <div className="space-y-1 sm:col-span-2">
+                <p className="text-sm text-gray-500">Secondary Email</p>
+                <p className="font-medium text-gray-900">{selectedAgent.secondaryEmail || "N/A"}</p>
+              </div>
+              <div className="space-y-1 sm:col-span-2">
+                <p className="text-sm text-gray-500">Created</p>
+                <p className="font-medium text-gray-900">{selectedAgent.createdAt ? new Date(selectedAgent.createdAt).toLocaleString() : "N/A"}</p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                className="rounded-xl bg-blue-600 px-5 py-3 text-white hover:bg-blue-700"
+                onClick={() => handleEditClick(selectedAgent)}
+              >
+                Edit
+              </button>
+              <button
+                className="rounded-xl bg-red-600 px-5 py-3 text-white hover:bg-red-700"
+                onClick={() => handleDelete(selectedAgent._id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditModal && selectedAgent && (
+        <div className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <h2 className="text-2xl font-semibold text-[#1e3a8a]">Edit Agent</h2>
+                <p className="text-sm text-gray-500">Update the fields below and save changes.</p>
+              </div>
+              <button
+                className="text-gray-500 hover:text-gray-900"
+                onClick={() => setShowEditModal(false)}
+                aria-label="Close edit form"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form className="space-y-5" onSubmit={handleSaveEdit}>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">First Name</label>
+                  <input
+                    name="firstName"
+                    value={editData.firstName}
+                    onChange={handleEditChange}
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-200"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Last Name</label>
+                  <input
+                    name="lastName"
+                    value={editData.lastName}
+                    onChange={handleEditChange}
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-200"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Email</label>
+                  <input
+                    name="email"
+                    type="email"
+                    value={editData.email}
+                    onChange={handleEditChange}
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-200"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Phone</label>
+                  <input
+                    name="phone"
+                    value={editData.phone}
+                    onChange={handleEditChange}
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-200"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="rounded-xl bg-blue-600 px-5 py-3 text-white hover:bg-blue-700 disabled:opacity-60"
+                >
+                  {isSaving ? "Saving..." : "Save changes"}
+                </button>
+                <button
+                  type="button"
+                  className="rounded-xl border border-gray-300 px-5 py-3 text-gray-700 hover:bg-gray-100"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import ProfileButton from "./ProfileButton";
 import { HiUsers } from "react-icons/hi2";
 
 const AddAgentForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -19,10 +22,35 @@ const AddAgentForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting agent data:", formData);
-    // You can later replace this with API call
+
+    try {
+      const token = localStorage.getItem("token");
+      const apiBase = import.meta.env.VITE_API_BASE || "";
+
+      await axios.post(
+        `${apiBase}/api/agents`,
+        {
+          firstName: formData.firstname,
+          lastName: formData.lastname,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Agent created successfully");
+      navigate("/allagents");
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || err.message || "Error creating agent");
+    }
   };
 
   return (
