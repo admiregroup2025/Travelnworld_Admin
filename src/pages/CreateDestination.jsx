@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HiGlobeAlt, HiLocationMarker, HiPhotograph, HiPencil, HiTrash } from 'react-icons/hi';
 import ProfileButton from '../components/ProfileButton';
 
@@ -13,15 +13,22 @@ const CreateDestination = () => {
     Honeymoon: false,
   });
   const [images, setImages] = useState(null);
-  const [destinations, setDestinations] = useState([
-    { id: 1, name: 'Andaman', type: 'Domestic' },
-    { id: 2, name: 'Andhra Pradesh', type: 'Domestic' },
-    { id: 3, name: 'Arunachal Pradesh', type: 'Domestic' },
-    { id: 4, name: 'Assam', type: 'Domestic' },
-    { id: 5, name: 'Bangalore', type: 'Domestic' },
-    { id: 6, name: 'Chhattisgarh', type: 'Domestic' },
-    { id: 7, name: 'Bali', type: 'International' },
-  ]);
+  const [destinations, setDestinations] = useState(() => {
+    const saved = localStorage.getItem('destinations');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, name: 'Andaman', type: 'Domestic' },
+      { id: 2, name: 'Andhra Pradesh', type: 'Domestic' },
+      { id: 3, name: 'Arunachal Pradesh', type: 'Domestic' },
+      { id: 4, name: 'Assam', type: 'Domestic' },
+      { id: 5, name: 'Bangalore', type: 'Domestic' },
+      { id: 6, name: 'Chhattisgarh', type: 'Domestic' },
+      { id: 7, name: 'Bali', type: 'International' },
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('destinations', JSON.stringify(destinations));
+  }, [destinations]);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingDestination, setEditingDestination] = useState(null);

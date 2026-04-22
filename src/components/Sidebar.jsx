@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom"
-
+import logo from "../assets/image/logo.jpeg";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
@@ -13,6 +13,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     bannerAds: false,
     agent: false,
     destinations: false,
+    testimonials: false,
+    blog: false,
+    terms: false,
   });
 
   const handleLogout = async (e) => {
@@ -69,7 +72,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(45deg, rgb(37, 99, 235), rgb(220, 38, 38));
+          background: linear-gradient(45deg, rgb(220, 38, 38), rgb(220, 38, 38));
           opacity: 0.1;
           transition: left 0.3s ease;
         }
@@ -83,22 +86,22 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         }
 
         .sidebar-scroll::-webkit-scrollbar-track {
-          background: rgba(37, 99, 235, 0.05);
+          background: rgba(220, 38, 38, 0.05);
           border-radius: 10px;
         }
 
         .sidebar-scroll::-webkit-scrollbar-thumb {
-          background: rgba(37, 99, 235, 0.3);
+          background: rgba(220, 38, 38, 0.3);
           border-radius: 10px;
         }
 
         .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-          background: rgba(37, 99, 235, 0.5);
+          background: rgba(220, 38, 38, 0.5);
         }
 
         .sidebar-scroll {
           scrollbar-width: thin;
-          scrollbar-color: rgba(37, 99, 235, 0.3) rgba(37, 99, 235, 0.05);
+          scrollbar-color: rgba(220, 38, 38, 0.3) rgba(220, 38, 38, 0.05);
         }
       `}</style>
 
@@ -112,7 +115,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           sidebar-scroll
           fixed top-0 left-0 w-[280px] h-screen
           bg-white/95 backdrop-blur-[15px] 
-          border-r border-blue-600/20 
+          border-r border-red-600/20 
           z-[1000] 
           transition-transform duration-300 ease-in-out
           shadow-[2px_0_20px_rgba(0,0,0,0.1)]
@@ -122,12 +125,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         `}
         id="sidebar"
       >
-        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-[15px] p-6 sm:p-8 border-b border-blue-600/20 text-center">
-          <div className="text-2xl sm:text-3xl font-extrabold text-blue-600 flex items-center justify-center gap-2 mb-2">
-            <i className="fas fa-shield-alt animate-rotate"></i>
-            <span>TravelnWorld</span>
+        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-[15px] p-4 sm:p-6 border-b border-red-600/20 text-center">
+          <div className="flex items-center justify-center mb-1">
+            <img src={logo} alt="TravelnWorld Logo" className="h-12 w-auto object-contain" />
           </div>
-          <div className="text-sm sm:text-base text-gray-500 font-medium">
+          <div className="text-xs sm:text-sm text-gray-500 font-bold uppercase tracking-widest">
             Super Admin Dashboard
           </div>
         </div>
@@ -145,8 +147,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 transition-all duration-300
                 ${
                   isActive("/")
-                    ? "bg-gradient-to-r from-blue-600/10 to-red-600/10 text-blue-600 shadow-[0_4px_15px_rgba(37,99,235,0.2)]"
-                    : "hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+                    ? "bg-gradient-to-r from-red-600/10 to-red-600/10 text-red-600 shadow-[0_4px_15px_rgba(220,38,38,0.2)]"
+                    : "hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
                 }
               `}
               onClick={() => setSidebarOpen(false)}
@@ -159,7 +161,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           {/* User Dropdown */}
           <div className="mx-4 my-2">
             <div
-              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
@@ -168,8 +170,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-user-cog text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base">Admin</span>
+                <i className="fas fa-user-shield text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base">Admin Management</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -186,8 +188,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 to="/allusers"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/allusers")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -197,8 +199,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 to="/adduser"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/adduser")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -210,7 +212,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           {/* Agent Dropdown */}
           <div className="mx-4 my-2">
             <div
-              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
@@ -237,8 +239,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 to="/allagents"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/allagents")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -248,8 +250,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 to="/addagent"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/addagent")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -261,7 +263,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           {/* Itineraries Dropdown */}
           <div className="mx-4 my-2">
             <div
-              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
@@ -270,7 +272,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-map-marked-alt text-lg sm:text-xl w-5 text-center"></i>
+                <i className="fas fa-route text-lg sm:text-xl w-5 text-center"></i>
                 <span className="text-sm sm:text-base">Itineraries</span>
               </div>
               <i
@@ -285,37 +287,26 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }`}
             >
               <Link
-                to="/itinerary"
+                to="/itineraries"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/itineraries")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
                 All Itineraries
               </Link>
-              {/* <Link
+              <Link
                 to="/additineraries"
                 className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
-                  isActive("/itineraries/add")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                  isActive("/additineraries")
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
                 Add Itinerary
-              </Link> */}
-              <Link
-                to="/itineraries/form"
-                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
-                  isActive("/itineraries/form")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
-                }`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                Itinerary Form
               </Link>
             </div>
           </div>
@@ -323,7 +314,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           {/* Destinations Dropdown */}
           <div className="mx-4 my-2">
             <div
-              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
@@ -350,8 +341,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 to="/create-destination"
                 className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/create-destination")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -362,8 +353,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 to="/create-city"
                 className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                   isActive("/create-city")
-                    ? "text-blue-600 bg-blue-600/10 font-medium"
-                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -373,11 +364,226 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </div>
           </div>
 
+          {/* Hero Video */}
+          <div className="mx-4 my-2">
+            <Link
+              to="/hero-video"
+              className={`
+                nav-link-before
+                flex items-center gap-4 px-6 py-4
+                no-underline rounded-xl
+                transition-all duration-300
+                ${
+                  isActive("/hero-video")
+                    ? "text-red-600 font-bold"
+                    : "text-gray-800 hover:text-red-600 hover:translate-x-1"
+                }
+              `}
+              onClick={() => setSidebarOpen(false)}
+            >
+              <i className="fas fa-file-video text-lg sm:text-xl w-5 text-center"></i>
+              <span className="text-sm sm:text-base">Hero Video</span>
+            </Link>
+          </div>
+
+          {/* Customer Gallery */}
+          <div className="mx-4 my-2">
+            <Link
+              to="/customer-gallery"
+              className={`
+                nav-link-before
+                flex items-center gap-4 px-6 py-4
+                text-gray-800 no-underline rounded-xl
+                transition-all duration-300
+                ${
+                  isActive("/customer-gallery")
+                    ? "text-red-600 font-bold"
+                    : "text-gray-800 hover:text-red-600 hover:translate-x-1"
+                }
+              `}
+              onClick={() => setSidebarOpen(false)}
+            >
+              <i className="fas fa-images text-lg sm:text-xl w-5 text-center"></i>
+              <span className="text-sm sm:text-base">Customer Gallery</span>
+            </Link>
+          </div>
+
+          {/* Testimonials Videos Dropdown */}
+          <div className="mx-4 my-2">
+            <div
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
+              onClick={() =>
+                setDropdownState((prev) => ({
+                  ...prev,
+                  testimonials: !prev.testimonials,
+                }))
+              }
+            >
+              <div className="flex items-center gap-4">
+                <i className="fas fa-video text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base font-semibold">Testimonials Videos</span>
+              </div>
+              <i
+                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
+                  dropdownState.testimonials ? "rotate-90" : ""
+                }`}
+              ></i>
+            </div>
+            <div
+              className={`pl-6 overflow-hidden transition-all duration-300 ${
+                dropdownState.testimonials ? "max-h-[500px]" : "max-h-0"
+              }`}
+            >
+              <Link
+                to="/testimonial-videos"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/testimonial-videos")
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-file-video w-5 text-center"></i>
+                <span>Testimonial Video</span>
+              </Link>
+              <Link
+                to="/testimonial-list"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/testimonial-list")
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-play w-5 text-center"></i>
+                <span>Testimonial List</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Blog Dropdown */}
+          <div className="mx-4 my-2">
+            <div
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
+              onClick={() =>
+                setDropdownState((prev) => ({
+                  ...prev,
+                  blog: !prev.blog,
+                }))
+              }
+            >
+              <div className="flex items-center gap-4">
+                <i className="fas fa-blog text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base font-semibold">Blog</span>
+              </div>
+              <i
+                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
+                  dropdownState.blog ? "rotate-90" : ""
+                }`}
+              ></i>
+            </div>
+            <div
+              className={`pl-6 overflow-hidden transition-all duration-300 ${
+                dropdownState.blog ? "max-h-[500px]" : "max-h-0"
+              }`}
+            >
+              <Link
+                to="/create-blog"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/create-blog")
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-pen w-5 text-center"></i>
+                <span>Create Blog</span>
+              </Link>
+              <Link
+                to="/blogs-list"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/blogs-list")
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-list-ul w-5 text-center"></i>
+                <span>Blogs List</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Terms Dropdown */}
+          <div className="mx-4 my-2">
+            <div
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
+              onClick={() =>
+                setDropdownState((prev) => ({
+                  ...prev,
+                  terms: !prev.terms,
+                }))
+              }
+            >
+              <div className="flex items-center gap-4">
+                <i className="fas fa-file-contract text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base font-semibold">Terms</span>
+              </div>
+              <i
+                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
+                  dropdownState.terms ? "rotate-90" : ""
+                }`}
+              ></i>
+            </div>
+            <div
+              className={`pl-6 overflow-hidden transition-all duration-300 ${
+                dropdownState.terms ? "max-h-[500px]" : "max-h-0"
+              }`}
+            >
+              <Link
+                to="/terms-management"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/terms-management")
+                    ? "text-white bg-red-600 font-bold shadow-md"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-file-invoice w-5 text-center"></i>
+                <span>Terms & Conditions</span>
+              </Link>
+              <Link
+                to="/payment-terms"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/payment-terms")
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-credit-card w-5 text-center"></i>
+                <span>Payment Mode Terms</span>
+              </Link>
+              <Link
+                to="/cancellation-policy"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/cancellation-policy")
+                    ? "text-red-600 bg-red-600/10 font-medium"
+                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-ban w-5 text-center"></i>
+                <span>Cancellation Policy</span>
+              </Link>
+            </div>
+          </div>
+
           {/* Manage Home */}
           <div className="mx-4 my-2">
             <a
               href="manage-home.html"
-              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
             >
               <i className="fas fa-home text-lg sm:text-xl w-5 text-center"></i>
               <span className="text-sm sm:text-base">Manage Home</span>
@@ -388,7 +594,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           <div className="mx-4 my-2">
             <a
               href="manage-team.html"
-              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
             >
               <i className="fas fa-user-friends text-lg sm:text-xl w-5 text-center"></i>
               <span className="text-sm sm:text-base">Team Management</span>
@@ -397,7 +603,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           {/* Banners */}
           <div className="mx-4 my-2">
             <div
-              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
@@ -425,8 +631,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   to="/topbanner"
                   className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                     isActive("/bannerads/home-top")
-                      ? "text-blue-600 bg-blue-600/10 font-medium"
-                      : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                      ? "text-red-600 bg-red-600/10 font-medium"
+                      : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -437,8 +643,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   to="/bannerads/manage"
                   className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
                     isActive("/bannerads/manage")
-                      ? "text-blue-600 bg-blue-600/10 font-medium"
-                      : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                      ? "text-red-600 bg-red-600/10 font-medium"
+                      : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -458,8 +664,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 transition-all duration-300
                 ${
                   isActive("/exportdata")
-                    ? "bg-gradient-to-r from-blue-600/10 to-red-600/10 text-blue-600 shadow-[0_4px_15px_rgba(37,99,235,0.2)]"
-                    : "hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+                    ? "bg-gradient-to-r from-red-600/10 to-red-600/10 text-red-600 shadow-[0_4px_15px_rgba(37,99,235,0.2)]"
+                    : "hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
                 }
               `}
               onClick={() => setSidebarOpen(false)}
@@ -473,7 +679,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           <div className="mx-4 my-2">
             <Link
               to="/enquries"
-              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() => setSidebarOpen(false)}
             >
               <i className="fas fa-question-circle text-lg sm:text-xl w-5 text-center"></i>

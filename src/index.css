@@ -18,6 +18,6 @@ select {
 }
 
 :root {
-  --primary-color: #6366f1; /* Indigo */
+  --primary-color: red; /* Indigo */
   --secondary-color: #ec4899; /* Pink */
 }

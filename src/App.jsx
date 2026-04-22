@@ -21,6 +21,15 @@ import Itinerary from "./pages/Itinerary";
 import HomeTopBanner from "./pages/HomeTopBanner";
 import CreateDestination from "./pages/CreateDestination";
 import CreateCity from "./pages/CreateCity";
+import HeroVideoManagement from "./pages/HeroVideoManagement";
+import CustomerGallery from "./pages/CustomerGallery";
+import TestimonialVideos from "./pages/TestimonialVideos";
+import TestimonialList from "./pages/TestimonialList";
+import CreateBlog from "./pages/CreateBlog";
+import BlogsList from "./pages/BlogsList";
+import TermsManagement from "./pages/TermsManagement";
+import PaymentTerms from "./pages/PaymentTerms";
+import CancellationPolicy from "./pages/CancellationPolicy";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -108,6 +117,15 @@ const App = () => {
                     <Route path="/enquries" element={<Enquiry />} />
                     <Route path="/create-destination" element={<CreateDestination />} />
                     <Route path="/create-city" element={<CreateCity />} />
+                    <Route path="/hero-video" element={<HeroVideoManagement />} />
+                    <Route path="/customer-gallery" element={<CustomerGallery />} />
+                    <Route path="/testimonial-videos" element={<TestimonialVideos />} />
+                    <Route path="/testimonial-list" element={<TestimonialList />} />
+                    <Route path="/create-blog" element={<CreateBlog />} />
+                    <Route path="/blogs-list" element={<BlogsList />} />
+                    <Route path="/terms-management" element={<TermsManagement />} />
+                    <Route path="/payment-terms" element={<PaymentTerms />} />
+                    <Route path="/cancellation-policy" element={<CancellationPolicy />} />
                   </Routes>
                 </div>
               </div>
