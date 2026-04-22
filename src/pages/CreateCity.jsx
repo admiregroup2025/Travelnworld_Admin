@@ -16,11 +16,14 @@ const CreateCity = () => {
   });
   const [images, setImages] = useState(null);
   
-  const [destinations] = useState([
-    { id: 1, name: 'Andaman', type: 'Domestic' },
-    { id: 2, name: 'Andhra Pradesh', type: 'Domestic' },
-    { id: 3, name: 'Bali', type: 'International' },
-  ]);
+  const [destinations] = useState(() => {
+    const saved = localStorage.getItem('destinations');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, name: 'Andaman', type: 'Domestic' },
+      { id: 2, name: 'Andhra Pradesh', type: 'Domestic' },
+      { id: 3, name: 'Bali', type: 'International' },
+    ];
+  });
 
   const [cities, setCities] = useState([
     { id: 1, name: 'Port Blair', destination: 'Andaman', travelType: 'Domestic', visibility: 'Public', categories: ['Trending'] },
