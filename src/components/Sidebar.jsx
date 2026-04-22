@@ -137,12 +137,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         {/* Navigation Menu */}
         <nav className="py-4 pb-8">
           {/* Dashboard */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <Link
               to="/"
               className={`
                 nav-link-before
-                flex items-center gap-4 px-6 py-4
+                flex items-center gap-3 px-5 py-2.5
                 text-gray-800 no-underline rounded-xl
                 transition-all duration-300
                 ${
@@ -153,15 +153,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               `}
               onClick={() => setSidebarOpen(false)}
             >
-              <i className="fas fa-tachometer-alt text-lg sm:text-xl w-5 text-center"></i>
-              <span className="text-sm sm:text-base">Dashboard</span>
+              <i className="fas fa-tachometer-alt text-base w-5 text-center"></i>
+              <span className="text-[13px] sm:text-sm">Dashboard</span>
             </Link>
           </div>
 
           {/* User Dropdown */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <div
-              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
+              className="nav-link-before flex items-center justify-between px-5 py-2.5 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
                 setDropdownState((prev) => ({
                   ...prev,
@@ -169,9 +169,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 }))
               }
             >
-              <div className="flex items-center gap-4">
-                <i className="fas fa-user-shield text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base">Admin Management</span>
+              <div className="flex items-center gap-3">
+                <i className="fas fa-user-shield text-base w-5 text-center"></i>
+                <span className="text-[13px] sm:text-sm">Admin Management</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -186,7 +186,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             >
               <Link
                 to="/allusers"
-                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                className={`block px-6 py-2 my-1 text-xs sm:text-sm rounded-lg transition-all duration-200 no-underline ${
                   isActive("/allusers")
                     ? "text-red-600 bg-red-600/10 font-medium"
                     : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
@@ -197,7 +197,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </Link>
               <Link
                 to="/adduser"
-                className={`block px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                className={`block px-6 py-2 my-1 text-xs sm:text-sm rounded-lg transition-all duration-200 no-underline ${
                   isActive("/adduser")
                     ? "text-red-600 bg-red-600/10 font-medium"
                     : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
@@ -210,7 +210,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Agent Dropdown */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <div
               className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
@@ -221,8 +221,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-users text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base">Agent</span>
+                <i className="fas fa-users text-base w-5 text-center"></i>
+                <span className="text-[13px] sm:text-sm">Agent</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -261,7 +261,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Itineraries Dropdown */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <div
               className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
@@ -272,8 +272,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-route text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base">Itineraries</span>
+                <i className="fas fa-route text-base w-5 text-center"></i>
+                <span className="text-[13px] sm:text-sm">Itineraries</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -312,7 +312,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Destinations Dropdown */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <div
               className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
@@ -323,8 +323,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-map-marker-alt text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base font-semibold">Destinations</span>
+                <i className="fas fa-map-marker-alt text-base w-5 text-center"></i>
+                <span className="text-[13px] sm:text-sm font-semibold">Destinations</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -365,7 +365,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Hero Video */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <Link
               to="/hero-video"
               className={`
@@ -381,13 +381,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               `}
               onClick={() => setSidebarOpen(false)}
             >
-              <i className="fas fa-file-video text-lg sm:text-xl w-5 text-center"></i>
-              <span className="text-sm sm:text-base">Hero Video</span>
+              <i className="fas fa-file-video text-base w-5 text-center"></i>
+              <span className="text-[13px] sm:text-sm">Hero Video</span>
             </Link>
           </div>
 
           {/* Customer Gallery */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <Link
               to="/customer-gallery"
               className={`
@@ -403,13 +403,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               `}
               onClick={() => setSidebarOpen(false)}
             >
-              <i className="fas fa-images text-lg sm:text-xl w-5 text-center"></i>
-              <span className="text-sm sm:text-base">Customer Gallery</span>
+              <i className="fas fa-images text-base w-5 text-center"></i>
+              <span className="text-[13px] sm:text-sm">Customer Gallery</span>
             </Link>
           </div>
 
           {/* Testimonials Videos Dropdown */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <div
               className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
@@ -420,8 +420,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-video text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base font-semibold">Testimonials Videos</span>
+                <i className="fas fa-video text-base w-5 text-center"></i>
+                <span className="text-[13px] sm:text-sm font-semibold">Testimonials Videos</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -462,7 +462,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Blog Dropdown */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <div
               className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
@@ -473,8 +473,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-blog text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base font-semibold">Blog</span>
+                <i className="fas fa-blog text-base w-5 text-center"></i>
+                <span className="text-[13px] sm:text-sm font-semibold">Blog</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -515,7 +515,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Terms Dropdown */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <div
               className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
@@ -526,8 +526,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-file-contract text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base font-semibold">Terms</span>
+                <i className="fas fa-file-contract text-base w-5 text-center"></i>
+                <span className="text-[13px] sm:text-sm font-semibold">Terms</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -580,28 +580,28 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Manage Home */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <a
               href="manage-home.html"
               className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
             >
-              <i className="fas fa-home text-lg sm:text-xl w-5 text-center"></i>
-              <span className="text-sm sm:text-base">Manage Home</span>
+              <i className="fas fa-home text-base w-5 text-center"></i>
+              <span className="text-[13px] sm:text-sm">Manage Home</span>
             </a>
           </div>
 
           {/* Team Management */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <a
               href="manage-team.html"
               className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
             >
-              <i className="fas fa-user-friends text-lg sm:text-xl w-5 text-center"></i>
-              <span className="text-sm sm:text-base">Team Management</span>
+              <i className="fas fa-user-friends text-base w-5 text-center"></i>
+              <span className="text-[13px] sm:text-sm">Team Management</span>
             </a>
           </div>
           {/* Banners */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <div
               className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() =>
@@ -612,8 +612,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               }
             >
               <div className="flex items-center gap-4">
-                <i className="fas fa-ad text-lg sm:text-xl w-5 text-center"></i>
-                <span className="text-sm sm:text-base">Banner Ads</span>
+                <i className="fas fa-ad text-base w-5 text-center"></i>
+                <span className="text-[13px] sm:text-sm">Banner Ads</span>
               </div>
               <i
                 className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
@@ -654,7 +654,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </div>
 
           {/* Export PDF */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <Link
               to="/exportdata"
               className={`
@@ -670,31 +670,31 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               `}
               onClick={() => setSidebarOpen(false)}
             >
-              <i className="fas fa-file-pdf text-lg sm:text-xl w-5 text-center"></i>
-              <span className="text-sm sm:text-base">Export PDF</span>
+              <i className="fas fa-file-pdf text-base w-5 text-center"></i>
+              <span className="text-[13px] sm:text-sm">Export PDF</span>
             </Link>
           </div>
 
           {/* Enquire - Added Here */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
             <Link
               to="/enquries"
               className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
               onClick={() => setSidebarOpen(false)}
             >
-              <i className="fas fa-question-circle text-lg sm:text-xl w-5 text-center"></i>
-              <span className="text-sm sm:text-base">Enquire</span>
+              <i className="fas fa-question-circle text-base w-5 text-center"></i>
+              <span className="text-[13px] sm:text-sm">Enquire</span>
             </Link>
           </div>
 
           {/* Logout */}
-          <div className="mx-4 my-2">
+          <div className="mx-4 my-1">
         <button
           onClick={handleLogout}
           className="w-full nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
         >
-          <i className="fas fa-sign-out-alt text-lg sm:text-xl w-5 text-center"></i>
-          <span className="text-sm sm:text-base">Logout</span>
+          <i className="fas fa-sign-out-alt text-base w-5 text-center"></i>
+          <span className="text-[13px] sm:text-sm">Logout</span>
         </button>
       </div>
         </nav>

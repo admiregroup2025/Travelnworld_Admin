@@ -76,7 +76,7 @@ const App = () => {
                 {/* Mobile Menu Toggle Button */}
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden fixed top-4 left-4 z-[1100] bg-blue-600 text-white border-none p-4 rounded-full cursor-pointer shadow-[0_4px_15px_rgba(37,99,235,0.3)] hover:bg-blue-700 transition-colors"
+                  className="lg:hidden fixed top-4 left-4 z-[1100] bg-red-600 text-white border-none p-4 rounded-full cursor-pointer shadow-[0_4px_15px_rgba(220,38,38,0.3)] hover:bg-red-700 transition-colors"
                   aria-label="Toggle sidebar"
                 >
                   <i
@@ -108,7 +108,7 @@ const App = () => {
                     <Route path="/addagent" element={<AddAgentForm />} />
                     <Route path="/exportdata" element={<ExportData />} />
                     <Route path="*" element={<Navigate to="/" />} />
-                    <Route path="/itinerary" element={<Itinerary />} />
+                    <Route path="/itineraries" element={<Itinerary />} />
                     <Route path="/topbanner" element={<HomeTopBanner />} />
                     <Route
                       path="/additineraries"
