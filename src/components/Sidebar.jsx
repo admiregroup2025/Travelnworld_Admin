@@ -12,6 +12,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     itineraries: false,
     bannerAds: false,
     agent: false,
+    destinations: false,
   });
 
   const handleLogout = async (e) => {
@@ -315,6 +316,59 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 onClick={() => setSidebarOpen(false)}
               >
                 Itinerary Form
+              </Link>
+            </div>
+          </div>
+
+          {/* Destinations Dropdown */}
+          <div className="mx-4 my-2">
+            <div
+              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-blue-600/10 hover:text-blue-600 hover:translate-x-1"
+              onClick={() =>
+                setDropdownState((prev) => ({
+                  ...prev,
+                  destinations: !prev.destinations,
+                }))
+              }
+            >
+              <div className="flex items-center gap-4">
+                <i className="fas fa-map-marker-alt text-lg sm:text-xl w-5 text-center"></i>
+                <span className="text-sm sm:text-base font-semibold">Destinations</span>
+              </div>
+              <i
+                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
+                  dropdownState.destinations ? "rotate-90" : ""
+                }`}
+              ></i>
+            </div>
+            <div
+              className={`pl-6 overflow-hidden transition-all duration-300 ${
+                dropdownState.destinations ? "max-h-[500px]" : "max-h-0"
+              }`}
+            >
+              <Link
+                to="/create-destination"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/create-destination")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-location-dot w-5 text-center"></i>
+                <span>Create Destination</span>
+              </Link>
+              <Link
+                to="/create-city"
+                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+                  isActive("/create-city")
+                    ? "text-blue-600 bg-blue-600/10 font-medium"
+                    : "text-gray-500 hover:text-blue-600 hover:bg-blue-600/10"
+                }`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <i className="fas fa-city w-5 text-center"></i>
+                <span>Create City</span>
               </Link>
             </div>
           </div>
