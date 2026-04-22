@@ -19,6 +19,8 @@ import AddUserForm from "./components/AddUserForm";
 import Enquiry from "./components/Enquiry";
 import Itinerary from "./pages/Itinerary";
 import HomeTopBanner from "./pages/HomeTopBanner";
+import CreateDestination from "./pages/CreateDestination";
+import CreateCity from "./pages/CreateCity";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -104,6 +106,8 @@ const App = () => {
                       element={<Additineraries />}
                     />
                     <Route path="/enquries" element={<Enquiry />} />
+                    <Route path="/create-destination" element={<CreateDestination />} />
+                    <Route path="/create-city" element={<CreateCity />} />
                   </Routes>
                 </div>
               </div>
