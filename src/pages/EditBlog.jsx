@@ -1,12 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
-import { HiPlus, HiUpload, HiArrowLeft, HiCloudUpload } from 'react-icons/hi';
+import { HiUpload, HiArrowLeft, HiCloudUpload } from 'react-icons/hi';
 import ProfileButton from '../components/ProfileButton';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const CreateBlog = () => {
+const EditBlog = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [title, setTitle] = useState('');
@@ -14,15 +15,33 @@ const CreateBlog = () => {
   const [coverImageUrl, setCoverImageUrl] = useState('');
   const [content, setContent] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Image Upload Logic
+  // Fetch Existing Blog Data
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/blogs/id/${id}`); // We need a backend route by ID
+        const blog = res.data.data;
+        setTitle(blog.title);
+        setCoverImageUrl(blog.coverImage);
+        setContent(blog.content);
+        setVisibility(blog.isPublished ? 'Public' : 'Private');
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching blog:", error);
+        alert("Failed to load blog data");
+        setLoading(false);
+      }
+    };
+    fetchBlog();
+  }, [id]);
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     const formData = new FormData();
     formData.append('image', file);
-
     try {
       setIsUploading(true);
       const res = await axios.post('http://localhost:5000/api/upload', formData, {
@@ -43,7 +62,6 @@ const CreateBlog = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     if (!title || !content) return alert("Please fill Title and Content");
-    if (!coverImageUrl) return alert("Please upload a cover image");
 
     const slug = title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
@@ -56,18 +74,20 @@ const CreateBlog = () => {
         isPublished: visibility === 'Public'
       };
 
-      await axios.post('http://localhost:5000/api/blogs', blogData, {
+      await axios.put(`http://localhost:5000/api/blogs/${id}`, blogData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem("token")}`
         }
       });
-      alert("Blog post created successfully!");
+      alert("Blog updated successfully!");
       navigate('/blogs');
     } catch (error) {
-      console.error("Error saving blog:", error);
-      alert(error.response?.data?.message || "Error saving blog");
+      console.error("Error updating blog:", error);
+      alert(error.response?.data?.message || "Error updating blog");
     }
   };
+
+  if (loading) return <div className="text-center py-20">Loading blog data...</div>;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] py-8 px-4 sm:px-6 lg:px-8 font-sans">
@@ -77,13 +97,12 @@ const CreateBlog = () => {
             <button onClick={() => navigate(-1)} className="p-2 hover:bg-red-50 rounded-full text-red-600 transition-all">
               <HiArrowLeft className="text-2xl" />
             </button>
-            <h1 className="text-2xl font-bold text-slate-900">Create New Post</h1>
+            <h1 className="text-2xl font-bold text-slate-900">Edit Blog Post</h1>
           </div>
           <ProfileButton />
         </header>
 
         <form onSubmit={handleSave} className="space-y-6">
-          {/* Title & Visibility */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Title</label>
@@ -105,7 +124,6 @@ const CreateBlog = () => {
             </div>
           </div>
 
-          {/* Featured Image Upload */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 space-y-4">
              <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Cover Image</label>
              <div 
@@ -119,23 +137,18 @@ const CreateBlog = () => {
                 ) : coverImageUrl ? (
                   <div className="space-y-4">
                     <img src={coverImageUrl} alt="Preview" className="w-full h-64 object-cover rounded-2xl shadow-lg" />
-                    <p className="text-green-600 text-sm font-bold flex items-center justify-center gap-2">✅ Image Ready!</p>
+                    <p className="text-green-600 text-sm font-bold">✅ Click to change image</p>
                   </div>
                 ) : (
                   <div className="space-y-2">
                     <HiCloudUpload className="text-slate-300 text-6xl mx-auto mb-4" />
                     <p className="text-slate-700 font-bold text-lg">Click to Upload Cover Image</p>
-                    <p className="text-slate-400 text-sm">PNG, JPG or WebP (max 5MB)</p>
                   </div>
                 )}
-                <input 
-                  type="file" ref={fileInputRef} className="hidden" 
-                  accept="image/*" onChange={handleImageUpload} 
-                />
+                <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} />
              </div>
           </div>
 
-          {/* Editor */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
             <label className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-4">Content</label>
             <div className="quill-wrapper">
@@ -144,7 +157,6 @@ const CreateBlog = () => {
                 value={content}
                 onChange={setContent}
                 style={{ height: '300px', marginBottom: '50px' }}
-                placeholder="Share your travel story..."
                 className="bg-white rounded-xl"
               />
             </div>
@@ -153,7 +165,7 @@ const CreateBlog = () => {
           <div className="flex justify-end gap-4">
             <button type="button" onClick={() => navigate(-1)} className="px-8 py-3 text-slate-500 font-bold hover:bg-slate-50 rounded-xl transition-all">Cancel</button>
             <button type="submit" disabled={isUploading} className={`bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-12 rounded-xl transition-all shadow-xl shadow-red-100 active:scale-95 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-              Publish Blog
+              Update Blog
             </button>
           </div>
         </form>
@@ -162,6 +174,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
-
-
+export default EditBlog;

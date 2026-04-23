@@ -27,6 +27,7 @@ import TestimonialVideos from "./pages/TestimonialVideos";
 import TestimonialList from "./pages/TestimonialList";
 import CreateBlog from "./pages/CreateBlog";
 import BlogsList from "./pages/BlogsList";
+import EditBlog from "./pages/EditBlog";
 import TermsManagement from "./pages/TermsManagement";
 import PaymentTerms from "./pages/PaymentTerms";
 import CancellationPolicy from "./pages/CancellationPolicy";
@@ -122,6 +123,7 @@ const App = () => {
                     <Route path="/testimonial-videos" element={<TestimonialVideos />} />
                     <Route path="/testimonial-list" element={<TestimonialList />} />
                     <Route path="/create-blog" element={<CreateBlog />} />
+                    <Route path="/edit-blog/:id" element={<EditBlog />} />
                     <Route path="/blogs-list" element={<BlogsList />} />
                     <Route path="/terms-management" element={<TermsManagement />} />
                     <Route path="/payment-terms" element={<PaymentTerms />} />
