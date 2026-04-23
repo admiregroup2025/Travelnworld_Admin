@@ -95,7 +95,7 @@ const CreateCity = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f1f5f9] py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
           <div className="flex justify-between items-center">
@@ -108,7 +108,7 @@ const CreateCity = () => {
         </header>
 
         {/* Selection Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Travel Type */}
             <div className="space-y-3">
@@ -171,7 +171,7 @@ const CreateCity = () => {
         </div>
 
         {/* Main Form Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow overflow-hidden">
           <div className="h-10 bg-slate-50 border-b border-slate-200"></div>
           <form onSubmit={handleSave} className="p-8 space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -222,16 +222,16 @@ const CreateCity = () => {
 
             {/* City Images */}
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-slate-600">City Images</label>
-              <div className="border-2 border-dashed border-slate-200 rounded-xl p-12 text-center hover:border-blue-400 transition-all cursor-pointer bg-slate-50/50 group">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <HiUpload className="text-blue-500 text-2xl" />
+              <label className="text-sm font-semibold text-slate-700">City Images</label>
+              <div className="flex items-center justify-center w-full">
+                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-blue-300 border-dashed rounded-xl cursor-pointer bg-blue-50 hover:bg-blue-100 transition-all group">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <HiUpload className="w-10 h-10 mb-3 text-blue-500 group-hover:text-blue-600 transition-colors" />
+                    <p className="mb-2 text-sm text-slate-600"><span className="font-semibold text-blue-600">Click to upload</span> or drag and drop</p>
+                    <p className="text-xs text-slate-500">SVG, PNG, JPG or WEBP up to 10MB</p>
                   </div>
-                  <p className="text-blue-500 font-semibold mt-2">Click to upload or drag and drop</p>
-                  <p className="text-slate-400 text-sm">PNG, JPG, GIF up to 10MB</p>
-                </div>
-                <input type="file" multiple className="hidden" />
+                  <input type="file" multiple className="hidden" />
+                </label>
               </div>
             </div>
 
@@ -239,7 +239,7 @@ const CreateCity = () => {
             <div className="flex justify-end pt-4">
               <button
                 type="submit"
-                className="bg-blue-600/30 hover:bg-blue-600 text-blue-700 hover:text-white font-bold py-3 px-8 rounded-xl transition-all shadow-sm active:transform active:scale-95 disabled:opacity-50"
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg shadow-blue-200 active:transform active:scale-95"
                 disabled={!cityName || !selectedState}
               >
                 {selectedCityToEdit ? "Update City" : "Create City"}
