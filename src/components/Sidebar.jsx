@@ -408,58 +408,28 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </Link>
           </div>
 
-          {/* Testimonials Videos Dropdown */}
+          {/* Testimonials */}
           <div className="mx-4 my-1">
-            <div
-              className="nav-link-before flex items-center justify-between px-6 py-4 text-gray-800 rounded-xl transition-all duration-300 cursor-pointer hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
-              onClick={() =>
-                setDropdownState((prev) => ({
-                  ...prev,
-                  testimonials: !prev.testimonials,
-                }))
-              }
-            >
-              <div className="flex items-center gap-4">
-                <i className="fas fa-video text-base w-5 text-center"></i>
-                <span className="text-[13px] sm:text-sm font-semibold">Testimonials Videos</span>
-              </div>
-              <i
-                className={`fas fa-chevron-right text-xs sm:text-sm transition-transform duration-300 ${
-                  dropdownState.testimonials ? "rotate-90" : ""
-                }`}
-              ></i>
-            </div>
-            <div
-              className={`pl-6 overflow-hidden transition-all duration-300 ${
-                dropdownState.testimonials ? "max-h-[500px]" : "max-h-0"
-              }`}
-            >
-              <Link
-                to="/testimonial-videos"
-                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
-                  isActive("/testimonial-videos")
-                    ? "text-red-600 bg-red-600/10 font-medium"
-                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
-                }`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                <i className="fas fa-file-video w-5 text-center"></i>
-                <span>Testimonial Video</span>
-              </Link>
-              <Link
-                to="/testimonial-list"
-                className={`flex items-center gap-3 px-6 py-3 my-1 text-sm sm:text-base rounded-lg transition-all duration-200 no-underline ${
+            <Link
+              to="/testimonial-list"
+              className={`
+                nav-link-before
+                flex items-center gap-4 px-6 py-4
+                text-gray-800 no-underline rounded-xl
+                transition-all duration-300
+                ${
                   isActive("/testimonial-list")
-                    ? "text-red-600 bg-red-600/10 font-medium"
-                    : "text-gray-500 hover:text-red-600 hover:bg-red-600/10"
-                }`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                <i className="fas fa-play w-5 text-center"></i>
-                <span>Testimonial List</span>
-              </Link>
-            </div>
+                    ? "text-red-600 bg-red-600/10 font-bold shadow-[0_4px_15px_rgba(220,38,38,0.1)]"
+                    : "hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
+                }
+              `}
+              onClick={() => setSidebarOpen(false)}
+            >
+              <i className="fas fa-star text-base w-5 text-center"></i>
+              <span className="text-[13px] sm:text-sm font-semibold">Testimonials</span>
+            </Link>
           </div>
+
 
           {/* Blog Dropdown */}
           <div className="mx-4 my-1">
@@ -675,15 +645,25 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </Link>
           </div>
 
-          {/* Enquire - Added Here */}
+          {/* Inquiries */}
           <div className="mx-4 my-1">
             <Link
               to="/enquries"
-              className="nav-link-before flex items-center gap-4 px-6 py-4 text-gray-800 no-underline rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
+              className={`
+                nav-link-before
+                flex items-center gap-4 px-6 py-4
+                text-gray-800 no-underline rounded-xl
+                transition-all duration-300
+                ${
+                  isActive("/enquries")
+                    ? "text-red-600 bg-red-600/10 font-bold shadow-[0_4px_15px_rgba(220,38,38,0.1)]"
+                    : "hover:bg-red-600/10 hover:text-red-600 hover:translate-x-1"
+                }
+              `}
               onClick={() => setSidebarOpen(false)}
             >
               <i className="fas fa-question-circle text-base w-5 text-center"></i>
-              <span className="text-[13px] sm:text-sm">Enquire</span>
+              <span className="text-[13px] sm:text-sm font-semibold">Inquiries</span>
             </Link>
           </div>
 

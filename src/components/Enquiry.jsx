@@ -1,116 +1,168 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import ProfileButton from './ProfileButton';
 
 const Enquiry = () => {
-  const data = [
-    {
-      name: "Amit Sharma",
-      companyName: "TravelEase Pvt Ltd",
-      mobileNumber: "+91 9876543210",
-      email: "amit.sharma@travelease.com",
-      location: "Mumbai, Maharashtra",
-      requirements: "Need a platform to manage corporate travel bookings and invoicing.",
-    },
-    {
-      name: "Priya Verma",
-      companyName: "WanderWorld Holidays",
-      mobileNumber: "+91 9123456789",
-      email: "priya.verma@wanderworld.in",
-      location: "Bangalore, Karnataka",
-      requirements: "Looking for an API integration for flight and hotel booking services.",
-    },
-    {
-      name: "Rohit Mehta",
-      companyName: "GoTrip Adventures",
-      mobileNumber: "+91 9988776655",
-      email: "rohit.mehta@gotrip.com",
-      location: "Delhi, India",
-      requirements: "Need a booking engine for domestic tour packages with payment gateway support.",
+  const [activeTab, setActiveTab] = useState('home'); // 'home' or 'contact'
+  const [homeEnquiries, setHomeEnquiries] = useState([]);
+  const [contactEnquiries, setContactEnquiries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+
+      // Fetch Home Page Enquiries
+      const homeRes = await axios.get('http://localhost:5000/api/enquiries', { headers });
+      if (homeRes.data.success) {
+        setHomeEnquiries(homeRes.data.data);
+      }
+
+      // Fetch Contact Us Inquiries
+      const contactRes = await axios.get('http://localhost:5000/api/contacts', { headers });
+      if (contactRes.data.success) {
+        setContactEnquiries(contactRes.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching inquiries:", error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleDelete = async (id, type) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "This action cannot be undone!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, delete it!'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const token = localStorage.getItem('token');
+        const endpoint = type === 'home' ? `http://localhost:5000/api/enquiries/${id}` : `http://localhost:5000/api/contacts/${id}`;
+        
+        await axios.delete(endpoint, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (type === 'home') {
+          setHomeEnquiries(homeEnquiries.filter(item => item._id !== id));
+        } else {
+          setContactEnquiries(contactEnquiries.filter(item => item._id !== id));
+        }
+        
+        Swal.fire('Deleted!', 'Inquiry has been removed.', 'success');
+      } catch (error) {
+        Swal.fire('Error!', 'Failed to delete inquiry.', 'error');
+      }
+    }
+  };
+
+  const currentData = activeTab === 'home' ? homeEnquiries : contactEnquiries;
 
   return (
     <div className="min-h-screen w-full px-4 sm:px-8 py-6 bg-[#f8fafc]">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-[15px] p-4 sm:p-6 rounded-[20px] border border-blue-600/20 mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] relative z-10">
-        <div className="text-xl sm:text-2xl lg:text-[2rem] font-bold text-blue-600 flex items-center gap-3 sm:gap-4">
+      <header className="bg-white/90 backdrop-blur-[15px] p-4 sm:p-6 rounded-[20px] border border-red-600/20 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm relative z-10">
+        <div className="text-xl sm:text-2xl lg:text-[2rem] font-bold text-red-600 flex items-center gap-3 sm:gap-4">
           <i className="fas fa-question-circle"></i>
-          <span>Enquire</span>
+          <span>Inquiries Management</span>
         </div>
         <div className="flex items-center gap-3 sm:gap-4">
           <ProfileButton />
         </div>
       </header>
 
-      {/* Responsive Table/Card */}
-      <div className="overflow-x-auto">
-        {/* Table for md and above */}
-        <table className="min-w-[800px] w-full bg-white rounded-2xl shadow-md hidden md:table">
-          <thead>
-            <tr className="bg-[linear-gradient(45deg,rgba(37,99,235,0.1),rgba(220,38,38,0.1))] text-[#2563eb]">
-              <th className="text-left py-3 px-4">Name</th>
-              <th className="text-left py-3 px-4">Company</th>
-              <th className="text-left py-3 px-4">Mobile</th>
-              <th className="text-left py-3 px-4">Email</th>
-              <th className="text-left py-3 px-4">Location</th>
-              <th className="text-left py-3 px-4">Requirements</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((entry, index) => (
-              <tr key={index} className="hover:bg-gray-100 transition">
-                <td className="py-3 px-4 font-medium">{entry.name}</td>
-                <td className="py-3 px-4">{entry.companyName}</td>
-                <td className="py-3 px-4">{entry.mobileNumber}</td>
-                <td className="py-3 px-4">{entry.email}</td>
-                <td className="py-3 px-4">{entry.location}</td>
-                <td className="py-3 px-4">{entry.requirements}</td>
-              </tr>
-            ))}
-            {data.length === 0 && (
-              <tr>
-                <td colSpan="6" className="text-center py-4 text-gray-500">
-                  No enquiries found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+      {/* Tabs */}
+      <div className="flex gap-4 mb-8 bg-white p-2 rounded-2xl w-fit shadow-sm border border-gray-100">
+        <button 
+          onClick={() => setActiveTab('home')}
+          className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${activeTab === 'home' ? 'bg-red-600 text-white shadow-lg scale-105' : 'text-gray-500 hover:bg-gray-50'}`}
+        >
+          <i className="fas fa-home mr-2"></i> Home Queries
+        </button>
+        <button 
+          onClick={() => setActiveTab('contact')}
+          className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${activeTab === 'contact' ? 'bg-red-600 text-white shadow-lg scale-105' : 'text-gray-500 hover:bg-gray-50'}`}
+        >
+          <i className="fas fa-envelope mr-2"></i> Contact Us
+        </button>
+      </div>
 
-        {/* Card view for small screens */}
-        <div className="flex flex-col space-y-4 md:hidden">
-          {data.length > 0 ? (
-            data.map((entry, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl shadow-md p-4 flex flex-col space-y-2"
-              >
-                <div className="text-lg font-semibold text-[#2563eb]">
-                  {entry.name}
-                </div>
-                <div className="text-sm text-gray-700">
-                  <strong>Company:</strong> {entry.companyName}
-                </div>
-                <div className="text-sm text-gray-700">
-                  <strong>Mobile:</strong> {entry.mobileNumber}
-                </div>
-                <div className="text-sm text-gray-700">
-                  <strong>Email:</strong> {entry.email}
-                </div>
-                <div className="text-sm text-gray-700">
-                  <strong>Location:</strong> {entry.location}
-                </div>
-                <div className="text-sm text-gray-700">
-                  <strong>Requirements:</strong> {entry.requirements}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="text-center py-4 text-gray-500">
-              No enquiries found.
-            </div>
-          )}
-        </div>
+      {/* Table Container */}
+      <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        {loading ? (
+          <div className="p-20 text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+            <p className="text-gray-500 font-medium">Fetching inquiries...</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-red-50 text-red-600 font-semibold border-b border-red-100">
+                  <th className="py-5 px-6">User Details</th>
+                  <th className="py-5 px-6">Company / Location</th>
+                  <th className="py-5 px-6">Inquiry Details</th>
+                  <th className="py-5 px-6">Date</th>
+                  <th className="py-5 px-6 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentData.map((item) => (
+                  <tr key={item._id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors group">
+                    <td className="py-5 px-6">
+                      <div className="font-bold text-gray-800">{item.name || item.firstName}</div>
+                      <div className="text-sm text-gray-500">{item.email}</div>
+                      <div className="text-xs text-blue-500 font-medium">{item.phone}</div>
+                    </td>
+                    <td className="py-5 px-6 text-gray-600">
+                      <div className="font-medium">{item.company_name || item.lastName || "Individual"}</div>
+                      <div className="text-xs">{item.location || "N/A"}</div>
+                    </td>
+                    <td className="py-5 px-6">
+                      <div className="max-w-[400px] text-gray-700 text-sm leading-relaxed" title={item.your_requirements || item.description}>
+                        {item.your_requirements || item.description}
+                      </div>
+                    </td>
+                    <td className="py-5 px-6 text-xs text-gray-400">
+                      {new Date(item.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="py-5 px-6 text-center">
+                      <button 
+                        onClick={() => handleDelete(item._id, activeTab)}
+                        className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2.5 rounded-full transition-all"
+                        title="Delete Inquiry"
+                      >
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {currentData.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="p-20 text-center">
+                      <i className="fas fa-inbox text-4xl text-gray-200 mb-4 block"></i>
+                      <p className="text-gray-400">No {activeTab === 'home' ? 'home' : 'contact'} inquiries found.</p>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

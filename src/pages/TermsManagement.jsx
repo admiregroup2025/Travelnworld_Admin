@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { HiDocumentText, HiCreditCard, HiXCircle, HiSave, HiPencil } from 'react-icons/hi';
+import { HiDocumentText, HiSave, HiPencil } from 'react-icons/hi';
 import ProfileButton from '../components/ProfileButton';
+import axios from 'axios';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 const TermsManagement = () => {
   const [category, setCategory] = useState('Domestic');
@@ -18,24 +21,54 @@ const TermsManagement = () => {
     International: allDestinations.filter(d => d.type === 'International').map(d => d.name)
   };
 
+  // Fetch terms from backend
+  useEffect(() => {
+    if (selectedDestination) {
+      const fetchTerms = async () => {
+        try {
+          const res = await axios.get(`http://localhost:5000/api/policies`, {
+            params: { type: 'terms', category, destination: selectedDestination }
+          });
+          setTermsContent(res.data.data.content || '');
+        } catch (error) {
+          console.error("Error fetching terms:", error);
+          setTermsContent('');
+        }
+      };
+      fetchTerms();
+    }
+  }, [selectedDestination, category]);
+
   const handleDestinationChange = (e) => {
-    const dest = e.target.value;
-    setSelectedDestination(dest);
-    if (dest === 'Andaman') {
-      setTermsContent(`All Indian nationals are required to carry a valid Government ID proof.
-All foreign nationals are requested to carry their passports with them during the tours.
-Any change in the itinerary is subject to the weather conditions, political manifestations and government restrictions. Company reserve the rights to rearrange the itinerary in such cases
-Refund/alternate for any complementary activity is not applicable if activity gets cancelled.
-In case a location is closed real-time due to weather conditions, political disturbances and government restrictions the operator will try to provide with a feasible alternative for the same. However, a refund may not be applicable
-Sailing of Pvt. Cruise (Makruzz/Green Ocean/ Coastal Cruise) is subject to availability if not operated/available travellers will be booked through Govt. Ferry.`);
-    } else {
-      setTermsContent('');
+    setSelectedDestination(e.target.value);
+    setIsEditing(false);
+  };
+
+  const handleSave = async () => {
+    try {
+      await axios.post('http://localhost:5000/api/policies', {
+        type: 'terms',
+        category,
+        destination: selectedDestination,
+        content: termsContent
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      setIsEditing(false);
+      alert('Terms updated successfully!');
+    } catch (error) {
+      console.error("Save error:", error);
+      alert('Failed to save terms');
     }
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    alert('Terms updated successfully!');
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      ['link', 'clean']
+    ],
   };
 
   return (
@@ -103,7 +136,7 @@ Sailing of Pvt. Cruise (Makruzz/Green Ocean/ Coastal Cruise) is subject to avail
         </div>
 
         {/* Terms Editor Area */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden min-h-[400px] flex flex-col">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden min-h-[500px] flex flex-col">
           <div className="px-8 py-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <HiDocumentText className="text-slate-400 text-xl" />
@@ -132,23 +165,30 @@ Sailing of Pvt. Cruise (Makruzz/Green Ocean/ Coastal Cruise) is subject to avail
                 <p className="font-medium">Please select a destination to manage its terms.</p>
               </div>
             ) : (
-              <textarea
-                value={termsContent}
-                onChange={(e) => setTermsContent(e.target.value)}
-                disabled={!isEditing}
-                placeholder="Enter destination terms here..."
-                className={`w-full flex-1 p-6 rounded-2xl border-2 transition-all outline-none resize-none leading-relaxed text-slate-700 font-medium ${
-                  isEditing 
-                  ? 'border-red-100 bg-white shadow-inner focus:border-red-300' 
-                  : 'border-transparent bg-slate-50/30 cursor-not-allowed'
-                }`}
-              ></textarea>
+              <div className={`quill-container flex-1 ${!isEditing ? 'quill-disabled' : ''}`}>
+                 <ReactQuill
+                  theme="snow"
+                  value={termsContent}
+                  onChange={setTermsContent}
+                  modules={modules}
+                  readOnly={!isEditing}
+                  placeholder="Enter destination terms here..."
+                  className="h-[400px] mb-12"
+                />
+              </div>
             )}
           </div>
         </div>
       </div>
+      <style>{`
+        .quill-disabled .ql-toolbar { display: none; }
+        .quill-disabled .ql-container.ql-snow { border-top: 1px solid #ebeef5 !important; }
+        .ql-container { font-size: 16px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+        .ql-toolbar { border-top-left-radius: 12px; border-top-right-radius: 12px; }
+      `}</style>
     </div>
   );
 };
 
 export default TermsManagement;
+
