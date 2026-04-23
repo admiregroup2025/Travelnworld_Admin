@@ -61,14 +61,14 @@ const DEFAULT_CANCELLATION_POLICY = `◆ Airfare/Train fare cancellation applied
 // SECTION WRAPPER — reusable card component for each form section
 // ─────────────────────────────────────────────────────────────────────────────
 const SectionCard = ({ icon: Icon, title, children }) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-5">
+  <div className="bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow p-6 mb-5">
     {title && (
       <>
         <div className="flex items-center gap-2 mb-1">
-          {Icon && <Icon className="text-gray-700 text-lg" />}
-          <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+          {Icon && <Icon className="text-slate-700 text-lg" />}
+          <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
         </div>
-        <hr className="border-gray-200 mb-5" />
+        <hr className="border-slate-200 mb-5" />
       </>
     )}
     {children}
@@ -79,7 +79,7 @@ const SectionCard = ({ icon: Icon, title, children }) => (
 // FIELD LABEL — reusable label with optional icon
 // ─────────────────────────────────────────────────────────────────────────────
 const FieldLabel = ({ icon: Icon, label }) => (
-  <div className="flex items-center gap-1.5 text-sm text-gray-600 font-medium mb-1.5">
+  <div className="flex items-center gap-1.5 text-sm text-slate-600 font-medium mb-1.5">
     {Icon && <Icon className="text-base" />}
     <span>{label}</span>
   </div>
@@ -227,8 +227,8 @@ const AddItineraries = ({ onSubmit }) => {
   // RENDER
   // ────────────────────────────────────────────────────────────────────────
   return (
-    <div className="bg-gray-100 min-h-screen px-4 py-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Create New Itinerary</h1>
+    <div className="bg-slate-50 min-h-screen px-4 py-8 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold text-slate-800 mb-8">Create New Itinerary</h1>
 
       {/* ── SECTION 1: CORE DETAILS ─────────────────────────────────────── */}
       <SectionCard icon={HiOutlineViewBoards} title="Core Details">
@@ -242,7 +242,7 @@ const AddItineraries = ({ onSubmit }) => {
               placeholder="Enter Itinerary Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
@@ -251,7 +251,7 @@ const AddItineraries = ({ onSubmit }) => {
             <FieldLabel icon={HiOutlineGlobe} label="Travel Type" />
             <div className="flex gap-6 mt-1">
               {["Domestic", "International"].map((type) => (
-                <label key={type} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                <label key={type} className="flex items-center gap-2 cursor-pointer text-sm text-slate-700">
                   <input
                     type="radio"
                     name="travelType"
@@ -272,7 +272,7 @@ const AddItineraries = ({ onSubmit }) => {
             <select
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="">-- Select Destination --</option>
               {destinationOptions.map((d) => (
@@ -287,7 +287,7 @@ const AddItineraries = ({ onSubmit }) => {
             <select
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="">-- Select Duration --</option>
               {DURATION_OPTIONS.map((d) => (
@@ -301,7 +301,7 @@ const AddItineraries = ({ onSubmit }) => {
             <FieldLabel icon={HiOutlineTag} label="Theme" />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2 mt-1">
               {THEMES.map((theme) => (
-                <label key={theme} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <label key={theme} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={themes.includes(theme)}
@@ -319,7 +319,7 @@ const AddItineraries = ({ onSubmit }) => {
             <FieldLabel icon={HiOutlineViewBoards} label="Classification" />
             <div className="flex flex-wrap gap-x-4 gap-y-2 mt-1">
               {CLASSIFICATIONS.map((cls) => (
-                <label key={cls} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <label key={cls} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={classification.includes(cls)}
@@ -338,7 +338,7 @@ const AddItineraries = ({ onSubmit }) => {
             <select
               value={packageType}
               onChange={(e) => setPackageType(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               {TYPE_OPTIONS.map((t) => (
                 <option key={t} value={t}>{t}</option>
@@ -352,7 +352,7 @@ const AddItineraries = ({ onSubmit }) => {
             <select
               value={visibility}
               onChange={(e) => setVisibility(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               {VISIBILITY_OPTIONS.map((v) => (
                 <option key={v} value={v}>{v}</option>
@@ -370,37 +370,41 @@ const AddItineraries = ({ onSubmit }) => {
           placeholder="Write a short description about the destination..."
           value={destinationDetail}
           onChange={(e) => setDestinationDetail(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+          className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
         />
       </SectionCard>
 
       {/* ── SECTION 3: MEDIA ─────────────────────────────────────────────── */}
       <SectionCard icon={HiOutlinePhotograph} title="Media">
         {!destination ? (
-          <p className="text-sm text-gray-400 italic">
+          <p className="text-sm text-slate-400 italic">
             Please select a destination in Core Details section to show available images.
           </p>
         ) : (
           <div>
             {/* File upload input */}
-            <label className="inline-flex items-center gap-2 cursor-pointer bg-blue-50 border border-blue-200 text-blue-600 text-sm px-4 py-2 rounded-lg hover:bg-blue-100 transition">
-              <HiOutlinePlus />
-              Upload Images
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                className="hidden"
-                onChange={handleMediaUpload}
-                // TODO: Wire to backend upload endpoint on change
-              />
-            </label>
+            <div className="flex items-center justify-center w-full mt-2">
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-blue-300 border-dashed rounded-xl cursor-pointer bg-blue-50 hover:bg-blue-100 transition-all group">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <HiOutlinePhotograph className="w-10 h-10 mb-3 text-blue-500 group-hover:text-blue-600 transition-colors" />
+                  <p className="mb-2 text-sm text-slate-600"><span className="font-semibold text-blue-600">Click to upload</span> or drag and drop</p>
+                  <p className="text-xs text-slate-500">SVG, PNG, JPG or WEBP up to 10MB</p>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handleMediaUpload}
+                />
+              </label>
+            </div>
 
             {/* Image previews */}
             {selectedMedia.length > 0 && (
               <div className="flex flex-wrap gap-3 mt-4">
                 {selectedMedia.map((src, i) => (
-                  <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
+                  <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden border border-slate-200">
                     <img src={src} alt="" className="w-full h-full object-cover" />
                     <button
                       onClick={() => setSelectedMedia(selectedMedia.filter((_, idx) => idx !== i))}
@@ -430,7 +434,7 @@ const AddItineraries = ({ onSubmit }) => {
                 <div>
                   <p className="font-semibold text-blue-700">Day {d.day} — {d.title}</p>
                   {d.locationDetail && (
-                    <p className="text-gray-500 mt-0.5 text-xs">{d.locationDetail}</p>
+                    <p className="text-slate-500 mt-0.5 text-xs">{d.locationDetail}</p>
                   )}
                 </div>
                 <button
@@ -453,7 +457,7 @@ const AddItineraries = ({ onSubmit }) => {
               placeholder="Enter location name"
               value={dayForm.title}
               onChange={(e) => setDayForm({ ...dayForm, title: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
@@ -464,7 +468,7 @@ const AddItineraries = ({ onSubmit }) => {
               min={1}
               value={dayForm.day}
               onChange={(e) => setDayForm({ ...dayForm, day: Number(e.target.value) })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
@@ -475,7 +479,7 @@ const AddItineraries = ({ onSubmit }) => {
               placeholder="Enter location details"
               value={dayForm.locationDetail}
               onChange={(e) => setDayForm({ ...dayForm, locationDetail: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+              className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
             />
           </div>
 
@@ -499,7 +503,7 @@ const AddItineraries = ({ onSubmit }) => {
           placeholder="Hotel stay, Meals, Airport transfer"
           value={inclusions}
           onChange={(e) => setInclusions(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+          className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
         />
       </SectionCard>
 
@@ -511,13 +515,13 @@ const AddItineraries = ({ onSubmit }) => {
           placeholder="Personal expenses, Travel insurance"
           value={exclusions}
           onChange={(e) => setExclusions(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+          className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
         />
       </SectionCard>
 
       {/* ── SECTION 7: HOTEL DETAILS ─────────────────────────────────────── */}
       <SectionCard icon={HiOutlineOfficeBuilding} title="Hotel Details">
-        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+        <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
           <input
             type="checkbox"
             checked={asPerCategory}
@@ -532,7 +536,7 @@ const AddItineraries = ({ onSubmit }) => {
       {/* ── SECTION 8: PRICING ───────────────────────────────────────────── */}
       <SectionCard icon={HiOutlineCurrencyRupee} title="Pricing">
         {/* As per best quote toggle */}
-        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer mb-4">
+        <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer mb-4">
           <input
             type="checkbox"
             checked={asBestQuote}
@@ -553,7 +557,7 @@ const AddItineraries = ({ onSubmit }) => {
                 placeholder="Enter standard price"
                 value={standardPrice}
                 onChange={(e) => setStandardPrice(e.target.value)}
-                className="w-full md:w-1/2 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full md:w-1/2 border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
 
@@ -565,7 +569,7 @@ const AddItineraries = ({ onSubmit }) => {
                 placeholder="Enter discount if any"
                 value={discountedPrice}
                 onChange={(e) => setDiscountedPrice(e.target.value)}
-                className="w-full md:w-1/2 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full md:w-1/2 border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
           </div>
@@ -580,7 +584,7 @@ const AddItineraries = ({ onSubmit }) => {
           placeholder="Auto-filled"
           value={termsConditions}
           onChange={(e) => setTermsConditions(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+          className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
           // TODO: Pre-fill from GET /api/settings/terms when component mounts
         />
       </SectionCard>
@@ -593,7 +597,7 @@ const AddItineraries = ({ onSubmit }) => {
           placeholder="Auto-filled from API, you can edit..."
           value={paymentMode}
           onChange={(e) => setPaymentMode(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+          className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
           // TODO: Pre-fill from GET /api/settings/payment-modes when component mounts
         />
       </SectionCard>
@@ -605,7 +609,7 @@ const AddItineraries = ({ onSubmit }) => {
           rows={6}
           value={cancellationPolicy}
           onChange={(e) => setCancellationPolicy(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+          className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
           // TODO: Pre-fill from GET /api/settings/cancellation-policy when component mounts
         />
       </SectionCard>
